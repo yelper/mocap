@@ -1,15 +1,4 @@
-/**
- * JMOCAP
- * 
- * Developed by Michael Kipp, 2008-2011, DFKI Saarbrücken, Germany
- * Extended by Quan Nguyen, DFKI
- * 
- * Contact: mich.kipp@gmail.com
- * 
- * This software has been released under the
- * GNU LESSER GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- */
-
+package mocap;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -40,16 +29,15 @@ import javax.vecmath.Vector3f;
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.universe.SimpleUniverse;
-import de.dfki.embots.mocap.figure.AnimData;
-import de.dfki.embots.mocap.figure.Bone;
-import de.dfki.embots.mocap.figure.Figure;
-import de.dfki.embots.mocap.figure.FigureManager;
-import de.dfki.embots.mocap.figure.MotionTrailPoint;
-import de.dfki.embots.mocap.gui.CameraChangeListener;
-import de.dfki.embots.mocap.reader.AMCReader;
-import de.dfki.embots.mocap.reader.BVHReader;
-import de.dfki.embots.mocap.scene.CoordCross;
-import de.dfki.embots.mocap.scene.Floor;
+import mocap.figure.AnimData;
+import mocap.figure.Bone;
+import mocap.figure.Figure;
+import mocap.figure.FigureManager;
+// import mocap.figure.MotionTrailPoint;
+import mocap.gui.CameraChangeListener;
+// TODO: import mocap.reader.BVHReader;
+import mocap.scene.CoordCross;
+import mocap.scene.Floor;
 import java.util.List;
 
 /**
@@ -67,7 +55,7 @@ public class JMocap
         MouseWheelListener
 {
 
-    private static final String VERSION = "1.0";
+    private static final String VERSION = "1.1";
     private static final boolean HAS_ORBIT_CONTROL = false;
     private static final int VIEW_ACTIVATION_RADIUS = 250;
     private static final double BACK_CLIP_DISTANCE = 500;
@@ -106,7 +94,7 @@ public class JMocap
     private int nReverseX = 1;
     private int nReverseY = 1;
     private boolean _bClearTrails;
-    private List<MotionTrailPoint> _motionTrailPoints = null;
+//    private List<MotionTrailPoint> _motionTrailPoints = null;
     private CameraChangeListener _cameraChangeListener = null;
     private boolean _bShowMotionTrailVelocity = false;
 
@@ -310,36 +298,20 @@ public class JMocap
         figure.getPlayer().reset();
     }
 
-    /**
-     * Loads motion file in AMC format.
-     * @throws IOException 
-     */
-    public void loadAMC(File file) throws IOException
-    {
-        loadAMC(file, _figure);
-    }
-    
-    /**
-     * Loads motion file in AMC format for the given figure.
-     * @throws IOException 
-     */
-    public void loadAMC(File file, Figure figure) throws IOException
-    {
-        AMCReader r = new AMCReader();
-        AnimData d = r.readAMC(file, figure.getSkeleton());
-        initAnim(d, file.getName(), figure);
-    }
 
     public void loadBVH(File f, float targetHeight, Point3d offset)
             throws IOException
     {
         _figureManager.pauseAll();
+        /* TODO: Implement this!
         BVHReader rd = new BVHReader(targetHeight);
         BVHReader.BVHResult bvh = rd.readFile(f);
         initFigure(bvh.skeleton, f.getName(), offset);
         initAnim(bvh.animation, f.getName(), _figure);
-
-        _dScale = rd.getScale();
+		
+		_dScale = rd.getScale();
+		*/
+        
     }
 
     protected Sphere createSphere(Color c, float radius)
@@ -416,133 +388,7 @@ public class JMocap
         return r;
     }
 
-    /**
-     * Shows the path of the special joint.
-     *
-     * @param startFrame
-     * @param endFrame
-     * @param color
-     * @param jointName
-     */
-    public void addMotionTrail(List<MotionTrailPoint> motionTrailPoints)
-    {
-        _bClearTrails = true;
-        _motionTrailPoints = motionTrailPoints;
-        _canvas.addPositionsToMotionTrail();
-        _canvas.repaint();
-    }
-
-    /**
-     * Add the path of the special joint to the scene
-     *
-     * @param startFrame
-     * @param endFrame
-     * @param color
-     * @param jointName
-     */
-    private void addPositionsToMotionTrailPoints(
-            List<MotionTrailPoint> motionTrailPoints)
-    {
-
-        if (_figure.getPlayer() != null) {
-            int nCurrentFrame = _figure.getPlayer().getCurrentFrame();
-            for (MotionTrailPoint motionTrailPoint : motionTrailPoints) {
-                Bone bone = _figure.getSkeleton().findBone(
-                        motionTrailPoint.getBone());
-
-                if (bone != null) {
-                    _figure.getPlayer().gotoTime(
-                            motionTrailPoint.getTimePointInSeconds());
-                    motionTrailPoint.setScale(_dScale);
-                    Point3d p3dPositionInWorld = new Point3d();
-                    bone.getWorldPosition(p3dPositionInWorld);
-
-                    // NEW: position is relative to root joint
-//                    bone.getRelativePosition(_figure.getSkeleton(), p3dPositionInWorld);
-                    
-                    motionTrailPoint.setPosition(p3dPositionInWorld);
-                    p3dPositionInWorld = null;
-
-                } else {
-                    System.err.println("Bone " + motionTrailPoint.getBone()
-                            + " not found");
-
-                }
-                bone = null;
-            }
-            // go to old position
-            _figure.getPlayer().gotoTime(
-                    nCurrentFrame / _figure.getPlayer().getPlaybackFps());
-        } else {
-            System.err.println("No player Mocap-Player found");
-
-        }
-
-    }
-
-    /**
-     * Add the given MotionTrailPoints to scene
-     *
-     * @param motionTrailPoints
-     *            Vector of MotionTrailPoints
-     */
-    private void addMotionTrailsToScene(
-            List<MotionTrailPoint> motionTrailPoints)
-    {
-        //		Point3d p = new Point3d();
-        //		_figure.getSkeleton().getWorldPosition(p);
-        //		System.out.println("Figure position in World: " + p);
-
-        if (_bgMotionTrails == null) {
-            _bgMotionTrails = new BranchGroup();
-            _bgMotionTrails.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
-            _bgMotionTrails.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
-            _bgMotionTrails.setCapability(BranchGroup.ALLOW_DETACH);
-            _root.addChild(_bgMotionTrails);
-        } else if (_bClearTrails) {
-            removeMotionTrails();
-        }
-
-        for (int i = 0; i + 1 < motionTrailPoints.size() - 1; i++) {
-            motionTrailPoints.get(i).showMotionTrailVelocity(
-                    _bShowMotionTrailVelocity);
-            _bgMotionTrails.addChild(motionTrailPoints.get(i).getObject());
-
-            Vector3d v3dNextPositionInWorld = new Vector3d();
-            motionTrailPoints.get(i + 1).getPosition(v3dNextPositionInWorld);
-            motionTrailPoints.get(i).angleVelocityVisualisation(
-                    new Point3d(v3dNextPositionInWorld));
-            if (i + 1 == motionTrailPoints.size() - 1) {
-                _bgMotionTrails.addChild(motionTrailPoints.get(i + 1).getObject());
-            }
-
-        }
-
-        // write the positions into a file
-        //		PathsFileWriter checkpointPoseReader = new PathsFileWriter();
-        //		checkpointPoseReader.writeDocument("checkpoints", motionTrailPoints);
-        //		System.out.println("Figure Scale: " + _figure.getScale());
-
-    }
-
-    public void showMotionTrailVelocity(boolean showMotionTrailVelocity)
-    {
-        if (showMotionTrailVelocity != _bShowMotionTrailVelocity
-                && _motionTrailPoints != null) {
-            for (MotionTrailPoint mtPoint : _motionTrailPoints) {
-                mtPoint.showMotionTrailVelocity(showMotionTrailVelocity);
-            }
-        }
-        _bShowMotionTrailVelocity = showMotionTrailVelocity;
-    }
-
-    public void removeMotionTrails()
-    {
-        if (_bgMotionTrails != null) {
-            _bgMotionTrails.removeAllChildren();
-        }
-    }
-
+    /*
     public void initCameraToSkeleton(Point3d cameraTarget)
     {
 
@@ -576,9 +422,7 @@ public class JMocap
 //		System.out.println("Max Distance:_p3dCameraTarget: " + _p3dCameraTarget);
 //		System.out.println("Max Distance:getCameraYaw(): " + getCameraYaw());
 //		System.out.println("Max Distance:getCameraPitch: " + getCameraPitch());
-
-
-    }
+    }*/
 
     private Transform3D moveCamera(double x, double y, double z, double yaw,
             double pitch, double roll, boolean holdLookAt)
@@ -870,8 +714,8 @@ public class JMocap
         {
             super.preRender();
             if (bAddMotionTrail) {
-                addPositionsToMotionTrailPoints(_motionTrailPoints);
-                addMotionTrailsToScene(_motionTrailPoints);
+                //addPositionsToMotionTrailPoints(_motionTrailPoints);
+                //addMotionTrailsToScene(_motionTrailPoints);
                 bAddMotionTrail = false;
             }
         }

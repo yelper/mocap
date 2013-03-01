@@ -1,3 +1,4 @@
+package mocap.gui;
 /**
  * JMOCAP
  *
@@ -9,10 +10,10 @@
  */
 
 
-import de.dfki.embots.mocap.JMocap;
-import de.dfki.embots.mocap.figure.Bone;
-import de.dfki.embots.mocap.figure.Figure;
-import de.dfki.embots.mocap.reader.ASFReader;
+import mocap.JMocap;
+import mocap.figure.Bone;
+import mocap.figure.Figure;
+// import mocap.reader.ASFReader;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -54,7 +55,8 @@ public class JMocapController implements ActionListener {
 
     /**
      * Loads skeleton and anim from previous session.
-     */
+     * ALPER - unnecessary
+     
     private void loadPreviousSkeleton() {
         String fnASF = _prop.getProperty(PROP_LAST_ASF);
         String fnAMC = _prop.getProperty(PROP_LAST_AMC);
@@ -74,7 +76,7 @@ public class JMocapController implements ActionListener {
                 _jMocap.clearAll();
             }
         }
-    }
+    }*/
 
     private File getPropFile() {
         return new File(System.getProperty("user.dir"), PROPERTIES_FILE);
@@ -134,9 +136,9 @@ public class JMocapController implements ActionListener {
         return null;
     }
 
-    /**
+    /** ALPER: disabling these
      * Loads definition file for a skeleton (ASF format).
-     */
+     * 
     protected void loadASFAction() {
         File f = promptForFile(PROP_DIR, "asf");
         if (f != null) {
@@ -160,7 +162,7 @@ public class JMocapController implements ActionListener {
 
     /**
      * Loads a motion file for a skeleton.
-     */
+     * 
     protected void loadAMCAction() {
         File f = promptForFile(PROP_DIR, "amc");
         if (f != null) {
@@ -209,7 +211,7 @@ public class JMocapController implements ActionListener {
                 // }
             }
         }
-    }
+    }     */
 
     protected void loadBVHAction() {
         File f = promptForFile(PROP_DIR, "bvh");
@@ -244,11 +246,12 @@ public class JMocapController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String c = e.getActionCommand();
         System.out.println("command=" + c);
-        if (c.equals(JMocapGUI.LOAD_ASF)) {
+        /*if (c.equals(JMocapGUI.LOAD_ASF)) {
             loadASFAction();
-        } else if (c.equals(JMocapGUI.LOAD_AMC)) {
+        //} else if (c.equals(JMocapGUI.LOAD_AMC)) {
             loadAMCAction();
-        } else if (c.equals(JMocapGUI.MENU_RESET_CAM)) {
+        } else */
+        if (c.equals(JMocapGUI.MENU_RESET_CAM)) {
             _jMocap.setCameraView(CAMERA, CAMERA_TARGET);
         } else if (c.equals(JMocapGUI.LOAD_BVH)) {
             loadBVHAction();

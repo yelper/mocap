@@ -1,3 +1,4 @@
+package mocap.gui;
 
 
 import java.awt.Color;
@@ -7,8 +8,8 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.dfki.embots.mocap.JMocap;
-import de.dfki.embots.mocap.player.PlayerFrameListener;
+import mocap.JMocap;
+import mocap.player.PlayerFrameListener;
 
 /**
  *

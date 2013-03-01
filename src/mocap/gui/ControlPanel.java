@@ -1,11 +1,15 @@
+package mocap.gui;
 
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
+
 import javax.media.j3d.Transform3D;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,9 +18,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.vecmath.Point3d;
-import de.dfki.embots.mocap.JMocap;
-import java.net.URL;
-import javax.swing.BoxLayout;
+
+import mocap.JMocap;
 
 /**
  * Pane on right hand side to load animations, change perspective,
@@ -68,6 +71,11 @@ public class ControlPanel extends JPanel
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         JButton loadASF = new JButton(JMocapGUI.LOAD_ASF);
         JButton loadAMC = new JButton(JMocapGUI.LOAD_AMC);
+        
+        // ALPER: disabling buttons
+        loadASF.setEnabled(false);
+        loadAMC.setEnabled(false);
+        
         JButton loadBVH = new JButton(JMocapGUI.LOAD_BVH);
         JButton clearAll = new JButton("Clear");
         p.add(loadASF);
@@ -79,7 +87,6 @@ public class ControlPanel extends JPanel
         loadBVH.addActionListener(actionListener);
         clearAll.addActionListener(new ActionListener()
         {
-
             @Override
             public void actionPerformed(ActionEvent e)
             {

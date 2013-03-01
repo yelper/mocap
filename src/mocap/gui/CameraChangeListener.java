@@ -1,3 +1,4 @@
+package mocap.gui;
 
 
 public abstract interface CameraChangeListener

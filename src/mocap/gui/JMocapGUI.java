@@ -1,3 +1,4 @@
+package mocap.gui;
 /**
  * JMOCAP
  * 
@@ -31,11 +32,11 @@ import javax.vecmath.Vector3f;
 
 import com.sun.j3d.utils.geometry.Sphere;
 
-import de.dfki.embots.mocap.JMocap;
-import de.dfki.embots.mocap.figure.Bone;
-import de.dfki.embots.mocap.figure.BoneGeom;
-import de.dfki.embots.mocap.figure.JointGeom;
-import de.dfki.embots.mocap.player.AnimClock;
+import mocap.JMocap;
+import mocap.figure.Bone;
+import mocap.figure.BoneGeom;
+import mocap.figure.JointGeom;
+import mocap.player.AnimClock;
 
 /**
  * Camera is set for a meter system, looking at a 2m person.
@@ -308,7 +309,8 @@ public class JMocapGUI extends JFrame
         _control.setFps(fps);
     }
 
-    private JPanel createLeftPane()
+    /* ALPER: seems like this is unnecessary (bottom-right-most panel)
+     * private JPanel createLeftPane()
     {
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout());
@@ -317,7 +319,7 @@ public class JMocapGUI extends JFrame
         p.add(BorderLayout.CENTER, _boneTree);
         p.add(BorderLayout.SOUTH, bip);
         return p;
-    }
+    }*/
 
     /**
      * Enables/disables only th ehierarchy with the given bone at its root.
