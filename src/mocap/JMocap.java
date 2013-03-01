@@ -36,6 +36,7 @@ import mocap.figure.FigureManager;
 // import mocap.figure.MotionTrailPoint;
 import mocap.gui.CameraChangeListener;
 // TODO: import mocap.reader.BVHReader;
+import mocap.reader.BVHReader;
 import mocap.scene.CoordCross;
 import mocap.scene.Floor;
 import java.util.List;
@@ -303,6 +304,9 @@ public class JMocap
             throws IOException
     {
         _figureManager.pauseAll();
+        BVHReader rd = new BVHReader();
+        rd.readFile(f);
+        
         /* TODO: Implement this!
         BVHReader rd = new BVHReader(targetHeight);
         BVHReader.BVHResult bvh = rd.readFile(f);

@@ -38,8 +38,6 @@ public class JMocapController implements ActionListener {
     private static final String PROP_DIR = "dir";
     public static final Point3d CAMERA = new Point3d(1, 3, 15);
     public static final Point3d CAMERA_TARGET = new Point3d(0, 1, 0);
-    private static final String PROP_LAST_ASF = "file.asf";
-    private static final String PROP_LAST_AMC = "file.amc";
     private static final String PROP_LAST_BVH = "file.bvh";
     private static final String PROPERTIES_FILE = ".jmocap";
     private JMocap _jMocap;
