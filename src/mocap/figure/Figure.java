@@ -42,14 +42,17 @@ public class Figure
         _tg = new TransformGroup();
         _tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 
-        _tg.addChild(_skeleton.getBaseTG());
+        //TODO: Uncomment/modify when we have a similar method in Bone
+        //_tg.addChild(_skeleton.getBaseTG());
         _branchGroup.addChild(_tg);
         _branchGroup.compile();
     }
 
     public double getScale()
     {
-        return _skeleton.getScale();
+    	//TODO: Uncomment/modify when we have a similar method in Bone
+        //return _skeleton.getScale();
+    	return 0.0;
     }
 
     /**
@@ -60,20 +63,22 @@ public class Figure
     {
         List<Bone> leaves = new ArrayList<Bone>();
         List<Bone> all = new ArrayList<Bone>();
-        _skeleton.collectBones(all);
-        for (Bone b : all) {
+        //TODO: see above
+        //_skeleton.collectBones(all);
+        /*for (Bone b : all) {
             if (b.getChildren().length == 0) {
                 leaves.add(b);
             }
-        }
+        }*/
         double dist = 0;
         Point3d p1 = new Point3d();
         Point3d p2 = new Point3d();
         for (Bone b1 : leaves) {
             for (Bone b2 : leaves) {
                 if (!b1.equals(b2)) {
-                    b1.getWorldPosition(p1);
-                    b2.getWorldPosition(p2);
+                	//TODO: see above
+                   // b1.getWorldPosition(p1);
+                   // b2.getWorldPosition(p2);
                     dist = Math.max(p1.distance(p2), dist);
                 }
             }

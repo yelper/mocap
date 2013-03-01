@@ -39,7 +39,8 @@ public class MocapPlayer extends AnimPlayer
     private void initSkeleton(Bone skeleton)
     {
         List<Bone> ls = new ArrayList<Bone>();
-        skeleton.collectBones(ls);
+        //TODO: When we have a similar method in our Bone class
+       // skeleton.collectBones(ls);
         _bones = new Bone[ls.size()];
         _bones = (Bone[]) ls.toArray(_bones);
     }
@@ -75,10 +76,10 @@ public class MocapPlayer extends AnimPlayer
         if (_animData != null) {
             for (int i = 0; i < _bones.length; i++) {
                 Bone bone = _bones[i];
-
-                if (bone != _root || !_pinAtRoot) {
+                //TODO
+                /*if (bone != _root || !_pinAtRoot) {
                     bone.setPose(frame, _animData.getBoneData(bone.getIndex()), _offset);
-                }
+                }*/
             }
             _frame = frame;
             for (PlayerFrameListener li : _listeners) {

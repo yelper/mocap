@@ -34,8 +34,8 @@ import com.sun.j3d.utils.geometry.Sphere;
 
 import mocap.JMocap;
 import mocap.figure.Bone;
-import mocap.figure.BoneGeom;
-import mocap.figure.JointGeom;
+//import mocap.figure.BoneGeom;
+//import mocap.figure.JointGeom;
 import mocap.player.AnimClock;
 
 /**
@@ -52,7 +52,7 @@ public class JMocapGUI extends JFrame
     static final String LOAD_AMC = "Load AMC..";
     static final String LOAD_BVH = "Load BVH..";
     private JMocap _jMocap;
-    private BoneHierarachyTree _boneTree;
+    //TODO: Replace with ours: private BoneHierarachyTree _boneTree;
     private ControlPanel _control;
     private TransformGroup _cursorTG;
     private Point3d _cursorPos = new Point3d();
@@ -64,13 +64,14 @@ public class JMocapGUI extends JFrame
         public void itemStateChanged(ItemEvent e)
         {
             String item = e.getItem().toString();
-            if (item.endsWith("translation")) {
+            //TODO
+            /*if (item.endsWith("translation")) {
                 _jMocap.getFigure().getSkeleton().setTranslationEnabled(
                         ((CheckboxMenuItem) e.getSource()).getState());
             } else if (item.endsWith("orientation")) {
                 _jMocap.getFigure().getSkeleton().setRotationEnabled(
                         ((CheckboxMenuItem) e.getSource()).getState());
-            }
+            }*/
         }
     }
 
@@ -82,7 +83,8 @@ public class JMocapGUI extends JFrame
         {
             System.out.println("item= " + e.getItem());
             String item = e.getItem().toString();
-            if (item.equals("bones off")) {
+            //TODO
+           /* if (item.equals("bones off")) {
                 _jMocap.getFigure().getSkeleton().selectGeom(BoneGeom.NONE);
             } else if (item.equals("lines")) {
                 _jMocap.getFigure().getSkeleton().selectGeom(BoneGeom.LINE);
@@ -120,7 +122,7 @@ public class JMocapGUI extends JFrame
                 } else {
                     _jMocap.getFigure().resetRotation();
                 }
-            }
+            }*/
         }
     }
 
@@ -186,9 +188,10 @@ public class JMocapGUI extends JFrame
     void updateSkeletonInfo(String name)
     {
         _control.getInfo().updateSkeleton(name);
-        if (_boneTree != null) {
+        //TODO
+        /*if (_boneTree != null) {
             _boneTree.loadSkeleton(_jMocap.getFigure().getSkeleton());
-        }
+        }*/
     }
 
     void updateAnimInfo(String name)
@@ -234,9 +237,11 @@ public class JMocapGUI extends JFrame
 
             public void actionPerformed(ActionEvent e)
             {
-                new JointInspector(_jMocap.getFigure(),
+            	//TODO: Action for "Inspect Bone" menu item
+                /*new JointInspector(_jMocap.getFigure(),
                         _jMocap.getFigure().getSkeleton().findBone(
                         "lhand"));
+                        */
             }
         });
 
@@ -345,6 +350,7 @@ public class JMocapGUI extends JFrame
 
     private void showPathController()
     {
-        new MotionTrailsControllerGUI(_jMocap);
+    	//TODO Maybe, if we decide to do motion trails, probably not
+        //new MotionTrailsControllerGUI(_jMocap);
     }
 }

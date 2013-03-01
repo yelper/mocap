@@ -1,6 +1,6 @@
 package mocap.figure;
 
-import de.dfki.embots.mocap.player.MocapPlayer;
+import mocap.player.MocapPlayer;
 import java.util.List;
 
 /**
