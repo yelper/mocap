@@ -226,8 +226,8 @@ public class JMocapController implements ActionListener {
                     _jMocap.loadBVH(f, sc, _view.getCursorPos());
 
                     // GUI related stuff:
-                    _view.updateSkeletonInfo(f.getName());
-                    _view.updateAnimInfo(f.getName());
+                    //_view.updateSkeletonInfo(f.getName());
+                    //_view.updateAnimInfo(f.getName());
                     _prop.put(PROP_LAST_BVH, f.toString());
                     saveProp();
                     _view.setFps((int) _jMocap.getFigure().getPlayer().getPlaybackFps());

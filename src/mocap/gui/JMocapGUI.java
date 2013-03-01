@@ -185,20 +185,20 @@ public class JMocapGUI extends JFrame
         _cursorPos.z = z;
     }
 
-    void updateSkeletonInfo(String name)
+    //SARAH: Not sure if these are needed
+    /*void updateSkeletonInfo(String name)
     {
         _control.getInfo().updateSkeleton(name);
-        //TODO
-        /*if (_boneTree != null) {
+        if (_boneTree != null) {
             _boneTree.loadSkeleton(_jMocap.getFigure().getSkeleton());
-        }*/
+        }
     }
 
     void updateAnimInfo(String name)
     {
         _control.getInfo().updateAnim(name);
-        // _control.getInfo().updateTotalFrames(_app.getFigure().getSkeleton().getNumFrames());
-    }
+        _control.getInfo().updateTotalFrames(_app.getFigure().getSkeleton().getNumFrames());
+    }*/
 
     private MenuBar createMenubar(ActionListener actionListener)
     {

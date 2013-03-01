@@ -36,7 +36,8 @@ public class ControlPanel extends JPanel
     private int _lastRot;
     protected JButton _playButton;
     protected ImageIcon _playIcon, _pauseIcon;
-    private InfoPanel _info;
+    //SARAH: I got rid of InfoPanel, you're right, it's not necessary
+    //private InfoPanel _info;
     private JLabel _fpsLabel;
     private JSlider _fpsSlider;
 
@@ -51,13 +52,13 @@ public class ControlPanel extends JPanel
         add(createFpsPane());
         add(create3DControls());
         add(createCursorControls());
-        add(_info = new InfoPanel(app));
+       // add(_info = new InfoPanel(app));
     }
 
-    public InfoPanel getInfo()
+    /*public InfoPanel getInfo()
     {
         return _info;
-    }
+    }*/
 
     public void setFps(int n)
     {
@@ -69,21 +70,22 @@ public class ControlPanel extends JPanel
         JPanel p = new JPanel();
         p.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(1), "File"));
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        JButton loadASF = new JButton(JMocapGUI.LOAD_ASF);
-        JButton loadAMC = new JButton(JMocapGUI.LOAD_AMC);
+        //JButton loadASF = new JButton(JMocapGUI.LOAD_ASF);
+        //JButton loadAMC = new JButton(JMocapGUI.LOAD_AMC);
         
         // ALPER: disabling buttons
-        loadASF.setEnabled(false);
-        loadAMC.setEnabled(false);
+        //SARAH: Removing buttons! :)
+       // loadASF.setEnabled(false);
+       // loadAMC.setEnabled(false);
         
         JButton loadBVH = new JButton(JMocapGUI.LOAD_BVH);
         JButton clearAll = new JButton("Clear");
-        p.add(loadASF);
-        p.add(loadAMC);
+        //p.add(loadASF);
+        //p.add(loadAMC);
         p.add(loadBVH);
         p.add(clearAll);
-        loadASF.addActionListener(actionListener);
-        loadAMC.addActionListener(actionListener);
+        //loadASF.addActionListener(actionListener);
+        //loadAMC.addActionListener(actionListener);
         loadBVH.addActionListener(actionListener);
         clearAll.addActionListener(new ActionListener()
         {
