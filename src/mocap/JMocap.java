@@ -307,12 +307,11 @@ public class JMocap
         BVHReader rd = new BVHReader();
         rd.readFile(f);
         
-        /* TODO: Implement this!
-        BVHReader rd = new BVHReader(targetHeight);
-        BVHReader.BVHResult bvh = rd.readFile(f);
-        initFigure(bvh.skeleton, f.getName(), offset);
-        initAnim(bvh.animation, f.getName(), _figure);
-		
+        initFigure(rd.skeleton, f.getName(), offset);
+        // TODO: figure this out
+        // initAnim(bvh.animation, f.getName(), _figure);
+        
+        /*
 		_dScale = rd.getScale();
 		*/
         

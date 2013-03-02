@@ -52,7 +52,7 @@ public class Figure
     {
     	//TODO: Uncomment/modify when we have a similar method in Bone
         //return _skeleton.getScale();
-    	return 0.0;
+    	return 1.0;
     }
 
     /**

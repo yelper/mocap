@@ -10,6 +10,7 @@ import mocap.j3d.Util;
 public class Bone {
 	private Point3d offset;
 	
+	private String name;
 	private Bone[] children;
 	private Bone parent;
 	
@@ -25,13 +26,11 @@ public class Bone {
 	private Vector3d posVector = new Vector3d();
 	
 	private Vector3d geomDir;
+	private BoneGeom boneGeom;
+	private JointGeom jointGeom;
 	
-	public Bone(String name, Point3d initialOffset, Bone parent, int dof, int index) {
-		this.dof = dof;
-		this.index = index;
-		this.offset = initialOffset;
-		this.parent = parent;
-		
+	public Bone()
+	{
 		baseTranslate = new TransformGroup();
 		baseTranslate.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 		baseTranslate.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
@@ -55,7 +54,15 @@ public class Bone {
 		translate.addChild(baseRotation);
 		baseRotation.addChild(rotation);
 		rotation.addChild(invBaseRotation);
+	}
+	
+	public Bone(String name, Bone parent, int dof, int index) {
+		this();
 		
+		this.name = name;
+		this.dof = dof;
+		this.index = index;
+		this.parent = parent;		
 	}
 	
 	public void setChildren(Bone[] children)
@@ -63,21 +70,34 @@ public class Bone {
 		this.children = children;
 	}
 	
+	public Bone[] getChildren()
+	{
+		return this.children;
+	}
+	
+	public void setParent(Bone parent)
+	{
+		this.parent = parent;
+	}
+	
 	public Bone getParent()
 	{
 		return this.parent;
 	}
 	
-	public Bone[] getChildren()
-	{
-		return this.children;
-	}
 	
 	public void getWorldPosition(Point3d p)
 	{
 		p.set(0,0,0);
 		Util.getFullTransform(baseRotation, transWorld);
 		transWorld.transform(p);
+	}
+	
+	public void setBaseTranslation(Vector3d vec)
+	{
+		Transform3D tf = new Transform3D();
+		tf.setTranslation(vec);
+		baseTranslate.setTransform(tf);
 	}
 	
 	/**
@@ -168,8 +188,15 @@ public class Bone {
 	{
 		this.geomDir = new Vector3d(dir);
 		// new bone geom
-		
+		boneGeom = new BoneGeom(invBaseRotation, dir);
+
 		// new join geom
+		jointGeom = new JointGeom(baseRotation, 0.4f);
 		
+	}
+
+	public Vector3d getOffset() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
