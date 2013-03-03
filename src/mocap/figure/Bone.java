@@ -188,15 +188,26 @@ public class Bone {
 	{
 		this.geomDir = new Vector3d(dir);
 		// new bone geom
-		boneGeom = new BoneGeom(invBaseRotation, dir);
+		this.boneGeom = new BoneGeom(invBaseRotation, dir);
 
 		// new join geom
-		jointGeom = new JointGeom(baseRotation, 0.4f);
+		this.jointGeom = new JointGeom(baseRotation, 0.4f);
 		
 	}
 
 	public Vector3d getOffset() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public int getDOF() {
+		return this.dof;
+	}
+
+	public int getIndex() {
+		return this.index;
+	}
+
+	public void setIndex(int i) {
+		this.index = i;
 	}
 }

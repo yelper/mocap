@@ -3,18 +3,22 @@ package mocap.reader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.vecmath.Vector3d;
 
+import mocap.figure.AnimData;
 import mocap.figure.Bone;
 
 public class BVHReader {
 
-	private double[][] motValues;
 	public Bone skeleton;
+	public AnimData data;
 	
+	private double[][] motValues;
 	private int indexCounter;
+	private List<Bone> allBones;
 	
 	abstract class BVHNode { Vector3d offset; }
 	class BVHLeaf extends BVHNode { }
@@ -54,6 +58,7 @@ public class BVHReader {
 				{
 					BVHJoint root = readBones(in, null, line.substring(line.indexOf(" ") + 1));
 					root.isRoot = true;
+					allBones = new ArrayList<Bone>();
 					this.skeleton = processBVHNodes(root, null);
 				}
 			}
@@ -79,10 +84,10 @@ public class BVHReader {
 				if (line.indexOf("Frame Time") < 0)
 					return false;
 				String[] tokens = line.split(" ");
-				double frameTime = 0; //TODO: not sure what this is for but
+				float frameTime = 0; //TODO: not sure what this is for but
 									  //I assume we need it!
 				try {
-					frameTime = Double.parseDouble(tokens[2]);
+					frameTime = Float.parseFloat(tokens[2]);
 				} catch (NumberFormatException e) {
 					return false;
 				}
@@ -123,6 +128,42 @@ public class BVHReader {
 					return false;
 				}
 				
+				// use the AnimData object to hold this data
+				data = new AnimData(allBones.size());
+				data.setFps(1.f / frameTime);
+				
+				float[][] motion = new float[allBones.size()][];
+				
+				// for each line, separate out each bone's motions
+				for (int i = 0; i < allBones.size(); i++)
+				{
+					Bone b = allBones.get(i);
+					int dof = b.getDOF();
+					motion[i] = new float[dof * frames]; // initialize this bone's movements
+					
+					int index = b.getIndex();  // gets the starting index of this 
+											   // bone's motion in any frame line
+					for (int f = 0; f < motValues.length; f++)
+					{
+						int motionIndex = f * dof; // base index for frame-based 
+						                           // indexing for each bone
+						for (int d = 0; d < dof; d++)
+						{
+							float v = (b.getDOF() == 6 && d < 3) ?  // this is a root node, so the first 
+									                             // three DOF is translation
+									  (float)motValues[f][index + d] : // pass-through translations
+									  (float)Math.toRadians(((float)motValues[f][index + d]));
+				            motion[i][motionIndex + d] = v;
+						}
+					}
+					
+					// put this bone's motion data into the AnimData object
+					data.putBoneData(i, motion[i]);
+					
+					// reset the index to be its index relative to all other objects
+					// (since the animation data is now stored bone-major)
+					b.setIndex(i);
+				}
 			}
 		}
 		return true;
@@ -174,6 +215,9 @@ public class BVHReader {
 			parent.geometry(node.offset);
 		}
 		curBone.setBaseTranslation(node.offset);
+		
+		// keep track of bones for matching up animation numbers
+		allBones.add(curBone);
 		
 		Bone[] children = new Bone[node.children.size()];
 		for (int i = 0; i < node.children.size(); i++) 

@@ -35,11 +35,9 @@ import mocap.figure.Figure;
 import mocap.figure.FigureManager;
 // import mocap.figure.MotionTrailPoint;
 import mocap.gui.CameraChangeListener;
-// TODO: import mocap.reader.BVHReader;
 import mocap.reader.BVHReader;
 import mocap.scene.CoordCross;
 import mocap.scene.Floor;
-import java.util.List;
 
 /**
  * Provides a Java3D world for viewing mocap files (ASF/AMC and BVH).
@@ -308,8 +306,7 @@ public class JMocap
         rd.readFile(f);
         
         initFigure(rd.skeleton, f.getName(), offset);
-        // TODO: figure this out
-        // initAnim(bvh.animation, f.getName(), _figure);
+        initAnim(rd.data, f.getName(), _figure);
         
         /*
 		_dScale = rd.getScale();
