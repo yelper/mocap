@@ -40,7 +40,7 @@ public class MocapPlayer extends AnimPlayer
     {
         List<Bone> ls = new ArrayList<Bone>();
         //TODO: When we have a similar method in our Bone class
-       // skeleton.collectBones(ls);
+        skeleton.collectBones(ls);
         _bones = new Bone[ls.size()];
         _bones = (Bone[]) ls.toArray(_bones);
     }

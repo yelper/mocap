@@ -184,7 +184,7 @@ public class ControlPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
             	//TODO: When we have a similar method in our Bone class
-                //_jmocap.getFigure().getSkeleton().reset();
+                _jmocap.getFigure().getSkeleton().reset();
             }
         });
         

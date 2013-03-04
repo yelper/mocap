@@ -42,8 +42,7 @@ public class Figure
         _tg = new TransformGroup();
         _tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 
-        //TODO: Uncomment/modify when we have a similar method in Bone
-        //_tg.addChild(_skeleton.getBaseTG());
+        _tg.addChild(_skeleton.getBaseTG());
         _branchGroup.addChild(_tg);
         _branchGroup.compile();
     }

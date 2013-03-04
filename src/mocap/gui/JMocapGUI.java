@@ -34,8 +34,8 @@ import com.sun.j3d.utils.geometry.Sphere;
 
 import mocap.JMocap;
 import mocap.figure.Bone;
-//import mocap.figure.BoneGeom;
-//import mocap.figure.JointGeom;
+import mocap.figure.BoneGeom;
+import mocap.figure.JointGeom;
 import mocap.player.AnimClock;
 
 /**
@@ -52,7 +52,7 @@ public class JMocapGUI extends JFrame
     static final String LOAD_AMC = "Load AMC..";
     static final String LOAD_BVH = "Load BVH..";
     private JMocap _jMocap;
-    //TODO: Replace with ours: private BoneHierarachyTree _boneTree;
+    //private BoneHierarachyTree _boneTree;
     private ControlPanel _control;
     private TransformGroup _cursorTG;
     private Point3d _cursorPos = new Point3d();
@@ -83,8 +83,7 @@ public class JMocapGUI extends JFrame
         {
             System.out.println("item= " + e.getItem());
             String item = e.getItem().toString();
-            //TODO
-           /* if (item.equals("bones off")) {
+            /*if (item.equals("bones off")) {
                 _jMocap.getFigure().getSkeleton().selectGeom(BoneGeom.NONE);
             } else if (item.equals("lines")) {
                 _jMocap.getFigure().getSkeleton().selectGeom(BoneGeom.LINE);
@@ -112,7 +111,7 @@ public class JMocapGUI extends JFrame
             } else if (item.equals("bone cylinders")) {
                 _jMocap.getFigure().getSkeleton().selectGeom(
                         BoneGeom.CYLINDER);
-            } else if (item.equals("show coord")) {
+            } else*/ if (item.equals("show coord")) {
                 _jMocap.showCoordCross(e.getStateChange() == ItemEvent.SELECTED);
             } else if (item.equals("show floor")) {
                 _jMocap.showFloor(e.getStateChange() == ItemEvent.SELECTED);
@@ -122,7 +121,7 @@ public class JMocapGUI extends JFrame
                 } else {
                     _jMocap.getFigure().resetRotation();
                 }
-            }*/
+            }
         }
     }
 

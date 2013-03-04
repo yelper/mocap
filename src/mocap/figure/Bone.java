@@ -1,5 +1,9 @@
 package mocap.figure;
 
+import java.util.List;
+
+import javax.media.j3d.Group;
+import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Point3d;
@@ -68,8 +72,15 @@ public class Bone {
 	public void setChildren(Bone[] children)
 	{
 		this.children = children;
+		for (Bone bone : children)
+			getEndTG().addChild(bone.getBaseTG());
 	}
 	
+	private TransformGroup getEndTG() {
+		// TODO Auto-generated method stub
+		return this.invBaseRotation;
+	}
+
 	public Bone[] getChildren()
 	{
 		return this.children;
@@ -191,8 +202,7 @@ public class Bone {
 		this.boneGeom = new BoneGeom(invBaseRotation, dir);
 
 		// new join geom
-		this.jointGeom = new JointGeom(baseRotation, 0.4f);
-		
+		this.jointGeom = new JointGeom(baseRotation, 0.4f);	
 	}
 
 	public Vector3d getOffset() {
@@ -209,5 +219,18 @@ public class Bone {
 
 	public void setIndex(int i) {
 		this.index = i;
+	}
+
+	public TransformGroup getBaseTG() {
+		return this.baseTranslate;
+	}
+
+	public void collectBones(List<Bone> ls) {
+		// TODO Auto-generated method stub
+		ls.add(this);
+		for (Bone child : children)
+		{
+			child.collectBones(ls);
+		}
 	}
 }
