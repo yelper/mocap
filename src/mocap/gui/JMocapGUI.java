@@ -48,8 +48,6 @@ public class JMocapGUI extends JFrame
 
     private static final float CURSOR_RADIUS = .02f;
     public static final String MENU_RESET_CAM = "Reset camera";
-    static final String LOAD_ASF = "Load ASF..";
-    static final String LOAD_AMC = "Load AMC..";
     static final String LOAD_BVH = "Load BVH..";
     private JMocap _jMocap;
     //private BoneHierarachyTree _boneTree;
@@ -205,10 +203,7 @@ public class JMocapGUI extends JFrame
 
         // ************** FILE MENU
         Menu m = new Menu("File");
-        MenuItem mi = new MenuItem(LOAD_ASF);
-        m.add(mi);
-        mi.addActionListener(actionListener);
-        mi = new MenuItem(LOAD_AMC);
+        MenuItem mi = new MenuItem(LOAD_BVH);
         m.add(mi);
         mi.addActionListener(actionListener);
         mb.add(m);

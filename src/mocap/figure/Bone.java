@@ -26,12 +26,17 @@ public class Bone {
 	
 	private TransformGroup baseTranslate, translate,
 	                       baseRotation, rotation, invBaseRotation;
-	private Transform3D t1, t2, trans, transWorld = new Transform3D();
+	private Transform3D t1 = new Transform3D(),
+						t2 = new Transform3D(),
+						trans = new Transform3D(),
+						transWorld = new Transform3D();
 	private Vector3d posVector = new Vector3d();
 	
 	private Vector3d geomDir;
 	private BoneGeom boneGeom;
 	private JointGeom jointGeom;
+	
+	private double scale = 1d;
 	
 	public Bone()
 	{
@@ -118,12 +123,13 @@ public class Bone {
 	 * @param data
 	 * 			 The data from the line of the current frame
 	 */
-	public void setPose(float[] data)
+	public void setPose(int frame, float[] data, Point3d offsetTrans)
 	{
 		// only modify if this bone has any DOFs 
 		if (dof > 0)
 		{
-			int offset = this.index;
+			//int offset = this.index;
+			int offset = frame * dof;
 			boolean hasTranslation, hasRotation = false; 
 			
 			// if this bone doesn't have a parent, set default pos vector
@@ -176,8 +182,15 @@ public class Bone {
 			
 			// set translation
 			// if this is a root, add the offset
-			if (this.offset != null & this.parent != null)
-				posVector.add(this.offset);
+			//if (this.offset != null & this.parent != null)
+			//	posVector.add(this.offset);
+			
+			// add offset to translation of root
+			if (offsetTrans != null && parent == null) {
+				posVector.add(offsetTrans);
+				hasTranslation = true;
+			}
+			
 			if (this.parent == null)
 			{
 				trans.setIdentity();
@@ -232,5 +245,21 @@ public class Bone {
 		{
 			child.collectBones(ls);
 		}
+	}
+	
+	public void scale(double factor) {
+		scale = factor;
+		baseTranslate.getTransform(t1);
+		t1.get(posVector);
+		posVector.scale(factor);
+		t1.set(posVector);
+		baseTranslate.setTransform(t1);
+		for (Bone b : children) {
+			b.scale(factor);
+		}
+	}
+
+	public double getScale() {
+		return scale;
 	}
 }

@@ -49,9 +49,7 @@ public class Figure
 
     public double getScale()
     {
-    	//TODO: Uncomment/modify when we have a similar method in Bone
-        //return _skeleton.getScale();
-    	return 1.0;
+        return _skeleton.getScale();
     }
 
     /**

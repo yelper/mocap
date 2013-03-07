@@ -561,7 +561,7 @@ public class JMocap
     private void onCameraChanged(String command, double value)
     {
         if (_cameraChangeListener != null) {
-            _cameraChangeListener.onCameraChanged(command, value);// TODO Auto-generated method stub
+            _cameraChangeListener.onCameraChanged(command, value);
         }
     }
 

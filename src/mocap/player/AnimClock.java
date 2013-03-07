@@ -28,12 +28,12 @@ public class AnimClock extends Thread {
             _frames++;
 
             // TODO: make this dependent on time *****
-            if (_frames >= 200) {
+            /*if (_frames >= 200) {
                 long t = System.currentTimeMillis();
                 _fps = _frames / ((t - _t0) / 1000f);
                 _frames = 0;
                 _t0 = t;
-            }
+            }*/
             _figureManager.update(_fps);
             try {
                 sleep(5);

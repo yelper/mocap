@@ -36,8 +36,6 @@ public class ControlPanel extends JPanel
     private int _lastRot;
     protected JButton _playButton;
     protected ImageIcon _playIcon, _pauseIcon;
-    //SARAH: I got rid of InfoPanel, you're right, it's not necessary
-    //private InfoPanel _info;
     private JLabel _fpsLabel;
     private JSlider _fpsSlider;
 
