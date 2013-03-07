@@ -131,6 +131,7 @@ public class BVHReader {
 				// use the AnimData object to hold this data
 				data = new AnimData(allBones.size());
 				data.setFps(1.f / frameTime);
+				data.setNumFrames(frames);
 				
 				float[][] motion = new float[allBones.size()][];
 				

@@ -290,7 +290,7 @@ public class JMocap
         /*TODO: This is where we should be scaling I think, but the scale 
          * method isn't right at this point... 
          */
-       // skel.scale(_figure.getScaleFactor());
+        // skel.scale(_figure.getScaleFactor());
     }
 
     /**
