@@ -24,6 +24,8 @@ public class Figure
     private Point3d _offset;
     private BranchGroup _branchGroup; // scenegraph root
     private TransformGroup _tg; // can be used to give a base orientation
+    
+    private double scaleFactor = 1;
 
     /**
      * Creates a new figure and initializes the skeleton.
@@ -51,6 +53,14 @@ public class Figure
     {
         return _skeleton.getScale();
     }
+    
+    public void setScaleFactor(double targetHeight) {
+    	scaleFactor = targetHeight / measureLength();
+    }
+    
+    public double getScaleFactor() {
+    	return scaleFactor;
+    }
 
     /**
      * Measures the length of the skeleton by computing the max. distance between any two leaves in
@@ -60,22 +70,20 @@ public class Figure
     {
         List<Bone> leaves = new ArrayList<Bone>();
         List<Bone> all = new ArrayList<Bone>();
-        //TODO: see above
-        //_skeleton.collectBones(all);
-        /*for (Bone b : all) {
+        _skeleton.collectBones(all);
+        for (Bone b : all) {
             if (b.getChildren().length == 0) {
                 leaves.add(b);
             }
-        }*/
+        }
         double dist = 0;
         Point3d p1 = new Point3d();
         Point3d p2 = new Point3d();
         for (Bone b1 : leaves) {
             for (Bone b2 : leaves) {
                 if (!b1.equals(b2)) {
-                	//TODO: see above
-                   // b1.getWorldPosition(p1);
-                   // b2.getWorldPosition(p2);
+                    b1.getWorldPosition(p1);
+                    b2.getWorldPosition(p2);
                     dist = Math.max(p1.distance(p2), dist);
                 }
             }

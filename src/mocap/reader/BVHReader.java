@@ -244,4 +244,8 @@ public class BVHReader {
 	public double[][] getMotVals() {
 		return motValues;
 	}
+
+	public double getScale() {
+		return skeleton.getScale();
+	}
 }

@@ -96,7 +96,8 @@ public class JMocap
 //    private List<MotionTrailPoint> _motionTrailPoints = null;
     private CameraChangeListener _cameraChangeListener = null;
     private boolean _bShowMotionTrailVelocity = false;
-
+    private float targetHeight;
+    
     public JMocap()
     {
         super();
@@ -285,6 +286,11 @@ public class JMocap
     {
         _figure = _figureManager.addFigure(name, skel, offset);
         _root.addChild(_figure.getBG());
+        _figure.setScaleFactor(targetHeight);
+        /*TODO: This is where we should be scaling I think, but the scale 
+         * method isn't right at this point... 
+         */
+       // skel.scale(_figure.getScaleFactor());
     }
 
     /**
@@ -308,9 +314,9 @@ public class JMocap
         initFigure(rd.skeleton, f.getName(), offset);
         initAnim(rd.data, f.getName(), _figure);
         
-        /*
+        this.targetHeight = targetHeight;
 		_dScale = rd.getScale();
-		*/
+		
         
     }
 

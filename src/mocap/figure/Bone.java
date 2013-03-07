@@ -36,7 +36,7 @@ public class Bone {
 	private BoneGeom boneGeom;
 	private JointGeom jointGeom;
 	
-	private double scale = 1d;
+	private double scaleFactor = 1d;
 	
 	public Bone()
 	{
@@ -248,18 +248,18 @@ public class Bone {
 	}
 	
 	public void scale(double factor) {
-		scale = factor;
+		scaleFactor = factor;
 		baseTranslate.getTransform(t1);
 		t1.get(posVector);
-		posVector.scale(factor);
+		posVector.scale(scaleFactor);
 		t1.set(posVector);
 		baseTranslate.setTransform(t1);
 		for (Bone b : children) {
-			b.scale(factor);
+			b.scale(scaleFactor);
 		}
 	}
 
 	public double getScale() {
-		return scale;
+		return scaleFactor;
 	}
 }
