@@ -237,7 +237,7 @@ public class BVHReader {
 		Bone curBone = new Bone(node.name, null, node.dof, node.index);
 		if (parent != null) {
 			curBone.setParent(parent);
-			parent.geometry(node.offset);
+			parent.geometry(node.offset, scale);
 		}
 		curBone.setBaseTranslation(node.offset);
 		
@@ -252,7 +252,7 @@ public class BVHReader {
 		curBone.setChildren(children);
 		
 		if (node.endpt != null)
-			curBone.geometry(node.endpt.offset);
+			curBone.geometry(node.endpt.offset, scale);
 		
 		return curBone;		
 	}

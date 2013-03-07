@@ -208,14 +208,14 @@ public class Bone {
 			b.reset();
 	}
 	
-	public void geometry(Vector3d dir)
+	public void geometry(Vector3d dir, double scaleFactor)
 	{
 		this.geomDir = new Vector3d(dir);
 		// new bone geom
 		this.boneGeom = new BoneGeom(invBaseRotation, dir);
 
 		// new join geom
-		this.jointGeom = new JointGeom(baseRotation, 0.4f);	
+		this.jointGeom = new JointGeom(baseRotation, (float) (0.4f * scaleFactor));	
 	}
 
 	public Vector3d getOffset() {
