@@ -77,7 +77,8 @@ public class MocapPlayer extends AnimPlayer
                 Bone bone = _bones[i];
                 //TODO
                 if (bone != _root || !_pinAtRoot) {
-                   // bone.setPose(frame, _animData.getBoneData(bone.getIndex()), _offset);
+                	//**TODO!!!** Don't understand... :(
+                    //bone.setPose(frame, _animData.getBoneData(bone.getIndex()), _offset);
                 }
             }
             _frame = frame;
