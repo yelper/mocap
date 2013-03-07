@@ -148,13 +148,24 @@ public class BVHReader {
 					{
 						int motionIndex = f * dof; // base index for frame-based 
 						                           // indexing for each bone
-						for (int d = 0; d < dof; d++)
+
+						// force the translation, if it exists, to the end of the vector to 
+						// match the TX,TY,TZ in Bone.java
+						if (dof == 6)
 						{
-							float v = (b.getDOF() == 6 && d < 3) ?  // this is a root node, so the first 
-									                             // three DOF is translation
-									  (float)motValues[f][index + d] : // pass-through translations
-									  (float)Math.toRadians(((float)motValues[f][index + d]));
-				            motion[i][motionIndex + d] = v;
+							for (int d = 0; d < 3; d++)
+								motion[i][motionIndex + 3 + d] = (float)motValues[f][index + d];
+							for (int d = 3; d < dof; d++)
+							{
+								float v = (float)Math.toRadians((float)motValues[f][index + d]);
+								motion[i][motionIndex - 3 + d] = v;
+							}
+						} else {
+							for (int d = 0; d < dof; d++)
+							{
+								float v = (float)Math.toRadians(((float)motValues[f][index + d]));
+					            motion[i][motionIndex + d] = v;
+							}
 						}
 					}
 					
