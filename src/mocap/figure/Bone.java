@@ -154,17 +154,17 @@ public class Bone {
 					hasRotation = true;
 					break;
 				case TX:
-					posVector.x = data[offset + i];
+					posVector.x = data[offset + i] * scaleFactor;
 					hasTranslation = true;
 					hasRotation = false;
 					break;	
 				case TY:
-					posVector.y = data[offset + i];
+					posVector.y = data[offset + i] * scaleFactor;
 					hasTranslation = true;
 					hasRotation = false;
 					break;
 				case TZ:
-					posVector.z = data[offset + i];
+					posVector.z = data[offset + i] * scaleFactor;
 					hasTranslation = true;
 					hasRotation = false;
 					break;

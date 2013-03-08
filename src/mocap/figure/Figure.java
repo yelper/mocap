@@ -158,6 +158,12 @@ public class Figure
 
     public void setAnimation(AnimData data)
     {
+    	// based on the translational offset of the hips in the first frame of motion
+    	// so set the offset to be minus that
+    	float[] hipData = data.getBoneData(0);
+    	Point3d negStartPos = new Point3d(hipData[3], hipData[4], hipData[5]);
+    	this._offset.sub(negStartPos);
+    	
         _player = new MocapPlayer(_skeleton, data, _offset);
         _player.setPlaybackFps(data.getFps());
     }
