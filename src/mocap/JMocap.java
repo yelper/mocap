@@ -286,11 +286,6 @@ public class JMocap
     {
         _figure = _figureManager.addFigure(name, skel, offset);
         _root.addChild(_figure.getBG());
-        _figure.setScaleFactor(targetHeight);
-        /*TODO: This is where we should be scaling I think, but the scale 
-         * method isn't right at this point... 
-         */
-        // skel.scale(_figure.getScaleFactor());
     }
 
     /**
@@ -309,7 +304,7 @@ public class JMocap
     {
         _figureManager.pauseAll();
         BVHReader rd = new BVHReader();
-        rd.readFile(f);
+        rd.readFile(f, targetHeight);
         
         initFigure(rd.skeleton, f.getName(), offset);
         initAnim(rd.data, f.getName(), _figure);

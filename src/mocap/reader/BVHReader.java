@@ -18,6 +18,8 @@ public class BVHReader {
 	
 	private double[][] motValues;
 	private int indexCounter;
+	private float targetHeight;
+	private double maxRootDistance, scale;
 	private List<Bone> allBones;
 	
 	abstract class BVHNode { Vector3d offset; }
@@ -25,11 +27,23 @@ public class BVHReader {
 	class BVHJoint extends BVHNode 
 	{
 		String name;
-		ArrayList<BVHNode> children = new ArrayList<BVHNode>();
+		ArrayList<BVHJoint> children = new ArrayList<BVHJoint>();
 		int dof;
 		int index;
 		boolean isRoot = false;
 		BVHLeaf endpt = null;
+		
+		void scale(double scale) {
+
+			offset.scale(scale);
+			for (BVHJoint j : children) {
+				j.scale(scale);
+			}
+			if (endpt != null) {
+				endpt.offset.scale(scale);
+			}
+			// System.out.println("scale " + name + ": " + offset);
+		}
 	}
 	
 	/**
@@ -42,9 +56,9 @@ public class BVHReader {
 	 *   formatted in any way.
 	 * @throws FileNotFoundException if the file could not be found.
 	 */
-	public boolean readFile(File bvhFile) throws FileNotFoundException {
+	public boolean readFile(File bvhFile, float targetHeight) throws FileNotFoundException {
 		Scanner in = new Scanner(bvhFile);
-		
+		this.targetHeight = targetHeight;
 		while (in.hasNextLine()) {
 			String line = in.nextLine();
 			
@@ -58,6 +72,14 @@ public class BVHReader {
 				{
 					BVHJoint root = readBones(in, null, line.substring(line.indexOf(" ") + 1));
 					root.isRoot = true;
+					if (targetHeight > -1) {
+						//TODO: I'm not sure about this 10, it was a 2 in the 
+						//original code but the figure was still too big so...
+						double s = targetHeight / (10 * maxRootDistance);
+						 System.out.println("### scaling: " + s);
+						root.scale(s);
+						scale = s;
+					}
 					allBones = new ArrayList<Bone>();
 					this.skeleton = processBVHNodes(root, null);
 				}
@@ -213,6 +235,8 @@ public class BVHReader {
 						break;
 				}
 				curJoint.endpt = end;
+				maxRootDistance = Math.max(maxRootDistance,
+						curJoint.endpt.offset.length());
 			}
 		}
 		
@@ -224,7 +248,7 @@ public class BVHReader {
 		Bone curBone = new Bone(node.name, null, node.dof, node.index);
 		if (parent != null) {
 			curBone.setParent(parent);
-			parent.geometry(node.offset);
+			parent.geometry(node.offset, scale);
 		}
 		curBone.setBaseTranslation(node.offset);
 		
@@ -239,7 +263,7 @@ public class BVHReader {
 		curBone.setChildren(children);
 		
 		if (node.endpt != null)
-			curBone.geometry(node.endpt.offset);
+			curBone.geometry(node.endpt.offset, scale);
 		
 		return curBone;		
 	}
@@ -258,6 +282,6 @@ public class BVHReader {
 	}
 
 	public double getScale() {
-		return skeleton.getScale();
+		return scale;
 	}
 }

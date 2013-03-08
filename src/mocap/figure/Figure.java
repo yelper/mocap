@@ -24,8 +24,6 @@ public class Figure
     private Point3d _offset;
     private BranchGroup _branchGroup; // scenegraph root
     private TransformGroup _tg; // can be used to give a base orientation
-    
-    private double scaleFactor = 1;
 
     /**
      * Creates a new figure and initializes the skeleton.
@@ -52,14 +50,6 @@ public class Figure
     public double getScale()
     {
         return _skeleton.getScale();
-    }
-    
-    public void setScaleFactor(double targetHeight) {
-    	scaleFactor = targetHeight / measureLength();
-    }
-    
-    public double getScaleFactor() {
-    	return scaleFactor;
     }
 
     /**
