@@ -221,6 +221,7 @@ public class JMocap
             _bgMotionTrails.removeAllChildren();
             _bgMotionTrails = null;
         }
+        BVHReader.resetAnimData();
 
     }
 

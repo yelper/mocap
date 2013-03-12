@@ -14,7 +14,9 @@ import mocap.figure.Bone;
 public class BVHReader {
 
 	public Bone skeleton;
-	public AnimData data;
+	
+	public static AnimData data;
+	public static int animCounter = 0;
 	
 	private double[][] motValues;
 	private int indexCounter;
@@ -46,9 +48,13 @@ public class BVHReader {
 		}
 	}
 	
+	public static void resetAnimData() { //for clearing the scene
+		animCounter = 0;
+		data = null;
+	}
+	
 	/**
-	 * Reads a BVH file. Currently only reads the motion values part of 
-	 * the file, we need to implement Bone and others for the rest. Stores
+	 * Reads a BVH file. Stores
 	 * the motion vales in the motValues 2-D array.
 	 * @param bvhFile the file to read from
 	 * @return True if the file was successfully read from. False if the file
@@ -152,9 +158,11 @@ public class BVHReader {
 				}
 				
 				// use the AnimData object to hold this data
-				data = new AnimData(allBones.size());
-				data.setFps(1.f / frameTime);
-				data.setNumFrames(frames);
+				if (data == null) {
+					data = new AnimData(allBones.size());
+					data.setFps(1.f / frameTime);
+					data.setNumFrames(frames);
+				}
 				
 				float[][] motion = new float[allBones.size()][];
 				
@@ -193,7 +201,7 @@ public class BVHReader {
 					}
 					
 					// put this bone's motion data into the AnimData object
-					data.putBoneData(i, motion[i]);
+					data.putBoneData(animCounter, i, motion[i]);
 					
 					// reset the index to be its index relative to all other objects
 					// (since the animation data is now stored bone-major)
@@ -201,6 +209,7 @@ public class BVHReader {
 				}
 			}
 		}
+		BVHReader.animCounter++;
 		return true;
 	}
 
