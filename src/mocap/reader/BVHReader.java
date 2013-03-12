@@ -19,7 +19,7 @@ public class BVHReader {
 	private double[][] motValues;
 	private int indexCounter;
 	private float targetHeight;
-	private double maxRootDistance, scale;
+	private double maxRootDistance, scale = 1.0;
 	private List<Bone> allBones;
 	
 	abstract class BVHNode { Vector3d offset; }
@@ -82,6 +82,7 @@ public class BVHReader {
 					}
 					allBones = new ArrayList<Bone>();
 					this.skeleton = processBVHNodes(root, null);
+					this.skeleton.scale(this.scale);
 				}
 			}
 			

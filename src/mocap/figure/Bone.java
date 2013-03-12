@@ -128,7 +128,6 @@ public class Bone {
 		// only modify if this bone has any DOFs 
 		if (dof > 0)
 		{
-			//int offset = this.index;
 			int offset = frame * dof;
 			boolean hasTranslation, hasRotation = false; 
 			
@@ -179,11 +178,6 @@ public class Bone {
 			
 			// set rotation
 			rotation.setTransform(t1);
-			
-			// set translation
-			// if this is a root, add the offset
-			//if (this.offset != null & this.parent != null)
-			//	posVector.add(this.offset);
 			
 			// add offset to translation of root
 			if (offsetTrans != null && parent == null) {
@@ -249,11 +243,11 @@ public class Bone {
 	
 	public void scale(double factor) {
 		scaleFactor = factor;
-		baseTranslate.getTransform(t1);
+		/*baseTranslate.getTransform(t1);
 		t1.get(posVector);
 		posVector.scale(scaleFactor);
 		t1.set(posVector);
-		baseTranslate.setTransform(t1);
+		baseTranslate.setTransform(t1);*/
 		for (Bone b : children) {
 			b.scale(scaleFactor);
 		}
