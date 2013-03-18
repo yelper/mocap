@@ -27,7 +27,7 @@ import mocap.JMocap;
  * 
  * @author Michael Kipp
  */
-public class ControlPanel extends JPanel
+public class ControlPanel extends JPanel implements ChangeListener
 {
 
     private static final int DEFAULT_FPS = 120;
@@ -36,8 +36,9 @@ public class ControlPanel extends JPanel
     private int _lastRot;
     protected JButton _playButton;
     protected ImageIcon _playIcon, _pauseIcon;
-    private JLabel _fpsLabel;
+    private JLabel _fpsLabel, _scrubLabel;
     private JSlider _fpsSlider;
+    private JSlider _scrubber;
 
     protected ControlPanel(JMocap app, JMocapGUI gui, ActionListener actionListener)
     {
@@ -50,13 +51,8 @@ public class ControlPanel extends JPanel
         add(createFpsPane());
         add(create3DControls());
         add(createCursorControls());
-       // add(_info = new InfoPanel(app));
+        add(createScrubberPane());
     }
-
-    /*public InfoPanel getInfo()
-    {
-        return _info;
-    }*/
 
     public void setFps(int n)
     {
@@ -68,22 +64,11 @@ public class ControlPanel extends JPanel
         JPanel p = new JPanel();
         p.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(1), "File"));
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        //JButton loadASF = new JButton(JMocapGUI.LOAD_ASF);
-        //JButton loadAMC = new JButton(JMocapGUI.LOAD_AMC);
-        
-        // ALPER: disabling buttons
-        //SARAH: Removing buttons! :)
-       // loadASF.setEnabled(false);
-       // loadAMC.setEnabled(false);
         
         JButton loadBVH = new JButton(JMocapGUI.LOAD_BVH);
         JButton clearAll = new JButton("Clear");
-        //p.add(loadASF);
-        //p.add(loadAMC);
         p.add(loadBVH);
         p.add(clearAll);
-        //loadASF.addActionListener(actionListener);
-        //loadAMC.addActionListener(actionListener);
         loadBVH.addActionListener(actionListener);
         clearAll.addActionListener(new ActionListener()
         {
@@ -322,6 +307,19 @@ public class ControlPanel extends JPanel
         _fpsSlider = s;
         return s;
     }
+    
+    private JSlider createScrubber()
+    {
+        _scrubber = new JSlider(JSlider.HORIZONTAL, 0, 0, 0);
+        _scrubber.setPreferredSize(new Dimension(120, 50));
+       // _scrubber.setMinorTickSpacing(50);
+       // _scrubber.setMajorTickSpacing(200);
+        _scrubber.setPaintTicks(true);
+        _scrubber.setPaintLabels(true);
+        _scrubber.setSnapToTicks(true);
+        _scrubber.addChangeListener(this);
+        return _scrubber;
+    }
 
     private JPanel createFpsPane()
     {
@@ -335,6 +333,38 @@ public class ControlPanel extends JPanel
         p.setPreferredSize(new Dimension(200, 100));
         return p;
     }
+    
+    private JPanel createScrubberPane()
+    {
+        JPanel p = new JPanel();
+        p.setLayout(new GridLayout(0, 1));
+        p.setBorder(BorderFactory.createEtchedBorder());
+        _scrubLabel = new JLabel("Current Frame: 0");
+        _scrubLabel.setHorizontalAlignment(JLabel.CENTER);
+        p.add(_scrubLabel);
+        p.add(createScrubber());
+        p.setPreferredSize(new Dimension(200, 100));
+        return p;
+    }
+    
+    public void setFrames(int numFrames) {
+    	_scrubber.setMaximum(numFrames-1);
+    	//This doesn't work. Apparently it's a JSlider bug. WTF?
+    	_scrubber.setMajorTickSpacing(numFrames / 5);
+    	_scrubber.setMinorTickSpacing(numFrames / 20);
+    	repaint();
+    }
+    
+    public void setScrubberPos(int frame) {
+    	_scrubber.setValue(frame);
+    	_scrubLabel.setText("Current Frame: " + frame);
+    }
+
+	@Override
+	public void stateChanged(ChangeEvent arg0) {
+		_jmocap.getFigureManager().goToFrame(_scrubber.getValue());
+		_scrubLabel.setText("Current Frame: " + _scrubber.getValue());
+	}
 
 //    protected void pause()
 //    {

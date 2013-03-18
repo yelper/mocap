@@ -307,6 +307,10 @@ public class JMocapGUI extends JFrame
     {
         _control.setFps(fps);
     }
+    
+    void setNumFrames(int numFrames) {
+    	_control.setFrames(numFrames);
+    }
 
     /* ALPER: seems like this is unnecessary (bottom-right-most panel)
      * private JPanel createLeftPane()
@@ -347,4 +351,8 @@ public class JMocapGUI extends JFrame
     	//TODO Maybe, if we decide to do motion trails, probably not
         //new MotionTrailsControllerGUI(_jMocap);
     }
+
+	public ControlPanel getControlPanel() {
+		return _control;
+	}
 }

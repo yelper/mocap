@@ -70,7 +70,7 @@ public class MocapPlayer extends AnimPlayer
         gotoFrame(f < _animData.getNumFrames() ? f : _animData.getNumFrames() - 1);
     }
 
-    private void gotoFrame(int frame)
+    public void gotoFrame(int frame)
     {
         if (_animData != null) {
             for (int i = 0; i < _bones.length; i++) {

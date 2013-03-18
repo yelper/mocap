@@ -35,6 +35,7 @@ import mocap.figure.Figure;
 import mocap.figure.FigureManager;
 // import mocap.figure.MotionTrailPoint;
 import mocap.gui.CameraChangeListener;
+import mocap.gui.ControlPanel;
 import mocap.reader.BVHReader;
 import mocap.scene.CoordCross;
 import mocap.scene.Floor;
@@ -97,6 +98,9 @@ public class JMocap
     private CameraChangeListener _cameraChangeListener = null;
     private boolean _bShowMotionTrailVelocity = false;
     private float targetHeight;
+    private int numFrames;
+    
+    private ControlPanel cPanel;
     
     public JMocap()
     {
@@ -310,10 +314,16 @@ public class JMocap
         initFigure(rd.skeleton, f.getName(), offset);
         initAnim(rd.data, f.getName(), _figure);
         
+        numFrames = rd.data.getNumFrames();
+        
         this.targetHeight = targetHeight;
 		_dScale = rd.getScale();
 		
         
+    }
+    
+    public int getNumFrames() {
+    	return numFrames;
     }
 
     protected Sphere createSphere(Color c, float radius)
@@ -677,6 +687,10 @@ public class JMocap
                 _nCameraRoll, _bLookAtPosition);
 
     }
+    
+    public void setControlPanel(ControlPanel panel) {
+    	cPanel = panel;
+    }
 
     class JMocapCanvas3D extends Canvas3D
     {
@@ -761,6 +775,10 @@ public class JMocap
                 graphics2D.drawString("frame: "
                         + _figure.getPlayer().getCurrentFrame(),
                         getSize().width / 2, getSize().height - 20);
+                //This would make the scrubber update as it plays, but it 
+                //makes it super slow... Need to figure out some way to change 
+                //the slider position without doing a full repaint?
+               // cPanel.setScrubberPos(_figure.getPlayer().getCurrentFrame());
             }
 
         }

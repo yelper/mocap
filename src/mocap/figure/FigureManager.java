@@ -57,6 +57,12 @@ public class FigureManager {
             f.getPlayer().setIsPlaying(false);
         }
     }
+    
+    public void goToFrame(int frame) {
+    	for (Figure f: _figures) {
+    		f.getPlayer().gotoFrame(frame);
+    	}
+    }
 
     public void stopAll() {
         for (Figure f : _figures) {

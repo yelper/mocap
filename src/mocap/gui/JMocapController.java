@@ -49,6 +49,7 @@ public class JMocapController implements ActionListener {
         _jMocap.setCameraView(CAMERA, CAMERA_TARGET);
         loadProp();
         _view = new JMocapGUI(this, _jMocap);
+        _jMocap.setControlPanel(_view.getControlPanel());
     }
 
     /**
@@ -229,6 +230,7 @@ public class JMocapController implements ActionListener {
                     _prop.put(PROP_LAST_BVH, f.toString());
                     saveProp();
                     _view.setFps((int) _jMocap.getFigure().getPlayer().getPlaybackFps());
+                    _view.setNumFrames(_jMocap.getNumFrames());
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(
                             null,
