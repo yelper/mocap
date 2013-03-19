@@ -164,22 +164,47 @@ public class BVHReader {
 					data.setNumFrames(frames);
 				}
 				
-				float[][] motion = new float[allBones.size()][];
+				// float[][] motion = new float[allBones.size()][];
+				
+				float[][] rotation  = new float[allBones.size()][];
+				float[] translation = new float[3 * frames];				
 				
 				// for each line, separate out each bone's motions
 				for (int i = 0; i < allBones.size(); i++)
 				{
 					Bone b = allBones.get(i);
 					int dof = b.getDOF();
-					motion[i] = new float[dof * frames]; // initialize this bone's movements
+					// motion[i] = new float[dof * frames]; // initialize this bone's movements
+
+					rotation[i] = new float[3 * frames];
 					
 					int index = b.getIndex();  // gets the starting index of this 
 											   // bone's motion in any frame line
 					for (int f = 0; f < motValues.length; f++)
 					{
-						int motionIndex = f * dof; // base index for frame-based 
-						                           // indexing for each bone
+						int motionIndex = 3 * f; // base index for frame-based 
+						                         // indexing for each bone
+						
+						if (dof == 6)
+						{
+							for (int d = 0; d < 3; d++)
+							{
+								// get translations
+								translation[motionIndex + d] = (float)motValues[f][index + d];
+								
+								// get the rotations
+								float v = (float)Math.toRadians((float)motValues[f][index + d + 3]);
+								rotation[i][motionIndex + d] = v;
+							}
+						} else {
+							for (int d = 0; d < 3; d++)
+							{
+								float v = (float)Math.toRadians((float)motValues[f][index + d]);
+								rotation[i][motionIndex + d] = v;
+							}
+						}
 
+						/*
 						// force the translation, if it exists, to the end of the vector to 
 						// match the TX,TY,TZ in Bone.java
 						if (dof == 6)
@@ -197,11 +222,16 @@ public class BVHReader {
 								float v = (float)Math.toRadians(((float)motValues[f][index + d]));
 					            motion[i][motionIndex + d] = v;
 							}
-						}
+						}*/
 					}
 					
 					// put this bone's motion data into the AnimData object
-					data.putBoneData(animCounter, i, motion[i]);
+					//data.putBoneData(animCounter, i, motion[i]);
+					
+					data.putBoneRotData(animCounter, i, rotation[i]);
+
+					if (dof == 6)
+						data.putBoneTransData(animCounter, translation);
 					
 					// reset the index to be its index relative to all other objects
 					// (since the animation data is now stored bone-major)

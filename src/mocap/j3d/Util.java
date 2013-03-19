@@ -2,6 +2,8 @@ package mocap.j3d;
 
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Quat4f;
 
 /**
  *
@@ -51,5 +53,34 @@ public class Util
         getFullTransform(frameTG, tf2);
         tf2.invert();
         tf.mul(tf2, tf);
+    }
+    
+    
+    /**
+     * Do some quaternion computation from Euler angles (from the animation data)
+     * 
+     * Expects the Euler angles in z,y,x order
+     */
+    
+    public static Quat4f getQuatFromEulerAngles(float[] eulerAngles)
+    {
+    	// create the axis-angle representations
+    	AxisAngle4f z = new AxisAngle4f(0, 0, 1, eulerAngles[0]);
+    	AxisAngle4f y = new AxisAngle4f(0, 1, 0, eulerAngles[1]);
+    	AxisAngle4f x = new AxisAngle4f(1, 0, 0, eulerAngles[2]);
+    	
+    	// set each quaternion with their one axis-rotation 
+    	Quat4f qz = new Quat4f();
+    	qz.set(z);
+    	Quat4f qy = new Quat4f();
+    	qy.set(y);
+    	Quat4f qx = new Quat4f();
+    	qx.set(x);
+    	
+    	// compose them together into qz to make an overall quaternion
+    	qz.mul(qy);
+    	qz.mul(qx);
+    	
+    	return qz;
     }
 }

@@ -7,7 +7,9 @@ import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Point3d;
+import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
 import mocap.j3d.Util;
 
@@ -192,6 +194,49 @@ public class Bone {
 				translate.setTransform(trans);
 			}
 		}
+	}
+	
+	
+	/**
+	 * Sets this bone/joint to the translation and rotation of the given frame.
+	 * Should be called from some animation loop
+	 * 
+	 * @param data
+	 * 			 The data from the line of the current frame
+	 */
+	public void setPose(Vector3f transV, Quat4f rot, Point3d offsetTrans)
+	{
+		// only modify if this bone has any DOFs 
+		if (dof > 0)
+		{
+			// if this bone doesn't have a parent, set default pos vector
+			if (parent == null)
+				posVector.set(0,0,0);
+			
+			posVector.set(transV);
+			posVector.scale(scaleFactor);
+			t1.setIdentity();
+			t1.set(rot);
+			
+			// set rotation
+			rotation.setTransform(t1);
+			
+			// add offset to translation of root
+			if (offsetTrans != null && parent == null)
+				posVector.add(offsetTrans);
+			
+			if (this.parent == null)
+			{
+				trans.setIdentity();
+				trans.setTranslation(posVector);
+				translate.setTransform(trans);
+			}
+		}
+	}
+	
+	public void setPose(Quat4f rot, Point3d offsetTrans)
+	{
+		setPose(new Vector3f(), rot, offsetTrans);
 	}
 	
 	public void reset()

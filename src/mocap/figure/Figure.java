@@ -55,7 +55,7 @@ public class Figure
     /**
      * Measures the length of the skeleton by computing the max. distance between any two leaves in
      * the skeleton tree. Figure must be LIVE to allow this operation.
-     */
+     
     public double measureLength()
     {
         List<Bone> leaves = new ArrayList<Bone>();
@@ -80,7 +80,7 @@ public class Figure
         }
         System.out.println("### LENGTH IS " + dist);
         return dist;
-    }
+    }*/
 
     /**
      * For motion data where the skeleton head point up the z-axis, use this transformation (reset
