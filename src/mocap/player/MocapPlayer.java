@@ -93,6 +93,11 @@ public class MocapPlayer extends AnimPlayer
             }
         }
     }
+    
+    public void setCurFrame(int frame)
+    {
+    	_time = frame / 1.0 / _fps;
+    }
 
     public int getNumFrames()
     {

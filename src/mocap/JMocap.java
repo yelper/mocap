@@ -11,6 +11,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.Appearance;
@@ -37,6 +38,7 @@ import mocap.figure.FigureManager;
 import mocap.gui.CameraChangeListener;
 import mocap.gui.ControlPanel;
 import mocap.reader.BVHReader;
+import mocap.reader.ConfigReader;
 import mocap.scene.CoordCross;
 import mocap.scene.Floor;
 
@@ -322,6 +324,18 @@ public class JMocap
 		// TODO: This should be the correct way to hook up the slider, 
 		// but it still lags the canvas :(
 		//getFigure().getPlayer().addListener(cPanel);
+    }
+    
+    public void loadCfg(File f, String workingDir, float targetHeight, Point3d offset)
+    		throws IOException
+    {
+    	_figureManager.pauseAll();
+    	ConfigReader cr = new ConfigReader();
+    	cr.readFile(f, workingDir, targetHeight);
+    	
+    	// TODO: do stuff with the read-in data here
+    	//       also see commented out lines in JMocapController.loadCfgAction
+    	ArrayList<AnimData> segments = cr.animData;
     }
     
     public int getNumFrames() {

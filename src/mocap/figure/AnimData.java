@@ -203,10 +203,42 @@ public class AnimData
     public int getNumAnims() {
     	return data.size();
     }
+    
+    public void setRotations(Quat4f[][] rots)
+    {
+    	rotations.clear();
+    	rotations.add(rots);
+    }
+    
+    public void setTranslations(Vector3f[] trans)
+    {
+    	translations.clear();
+    	translations.add(trans);
+    }
 
     @Override
     public String toString()
     {
         return "<AnimData frames:" + _numFrames + ">";
     }
+
+	public AnimData subCopy(int startFrame, int endFrame) {
+		AnimData ret = new AnimData(_numBones);
+		ret.setFps(_fps);
+		ret.setNumFrames(endFrame - startFrame);
+		
+		// chop up each bone's animdata to the specified window
+		Quat4f[][] thisRot = rotations.get(0);
+		Quat4f[][] retRot = new Quat4f[_numBones][];
+		for (int i = 0; i < thisRot.length; i++)
+		{
+			retRot[i] = Arrays.copyOfRange(thisRot[i], startFrame, endFrame);
+		}
+		ret.setRotations(retRot);
+		
+		Vector3f[] subtrans = Arrays.copyOfRange(translations.get(0), startFrame, endFrame);
+		ret.setTranslations(subtrans);		
+		
+		return ret;
+	}
 }

@@ -49,6 +49,7 @@ public class JMocapGUI extends JFrame
     private static final float CURSOR_RADIUS = .02f;
     public static final String MENU_RESET_CAM = "Reset camera";
     static final String LOAD_BVH = "Load BVH..";
+    static final String LOAD_CFG = "Load Config..";
     private JMocap _jMocap;
     //private BoneHierarachyTree _boneTree;
     private ControlPanel _control;

@@ -241,6 +241,33 @@ public class JMocapController implements ActionListener {
             }
         }
     }
+    
+    protected void loadCfgAction()
+    {
+    	File f = promptForFile(PROP_DIR, "cfg");
+    	if (f != null) 
+    	{
+    		String scale = JOptionPane.showInputDialog(null, "Please enter target height (or -1)", 5);
+            if (scale != null) {
+            	try {
+            		float sc = Float.parseFloat(scale);
+            		String workingDir = _prop.getProperty(PROP_DIR);
+            		_jMocap.loadCfg(f, workingDir, sc, _view.getCursorPos());
+            		
+                    //_prop.put(PROP_LAST_BVH, f.toString());
+                    //saveProp();
+                    //_view.setFps((int) _jMocap.getFigure().getPlayer().getPlaybackFps());
+                    //_view.setNumFrames(_jMocap.getNumFrames());
+            	} catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Couldn't load " + f.getName() + ": " + ex.getMessage(),
+                            "loading error",
+                            JOptionPane.ERROR_MESSAGE);
+            	}
+            }
+    	}
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -255,6 +282,10 @@ public class JMocapController implements ActionListener {
             _jMocap.setCameraView(CAMERA, CAMERA_TARGET);
         } else if (c.equals(JMocapGUI.LOAD_BVH)) {
             loadBVHAction();
+        } else if (c.equals(JMocapGUI.LOAD_CFG)) {
+        	loadCfgAction();
         }
+        	
+        	
     }
 }

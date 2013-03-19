@@ -28,7 +28,7 @@ import mocap.player.PlayerFrameListener;
  * 
  * @author Michael Kipp
  */
-public class ControlPanel extends JPanel implements ChangeListener, PlayerFrameListener 
+public class ControlPanel extends JPanel implements PlayerFrameListener 
 {
 
     private static final int DEFAULT_FPS = 120;
@@ -67,10 +67,13 @@ public class ControlPanel extends JPanel implements ChangeListener, PlayerFrameL
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         
         JButton loadBVH = new JButton(JMocapGUI.LOAD_BVH);
+        JButton loadCfg = new JButton(JMocapGUI.LOAD_CFG);
         JButton clearAll = new JButton("Clear");
         p.add(loadBVH);
+        p.add(loadCfg);
         p.add(clearAll);
         loadBVH.addActionListener(actionListener);
+        loadCfg.addActionListener(actionListener);
         clearAll.addActionListener(new ActionListener()
         {
             @Override
@@ -318,7 +321,28 @@ public class ControlPanel extends JPanel implements ChangeListener, PlayerFrameL
         _scrubber.setPaintTicks(true);
         _scrubber.setPaintLabels(true);
         _scrubber.setSnapToTicks(true);
-        _scrubber.addChangeListener(this);
+        _scrubber.addChangeListener(new ChangeListener()
+        {
+        	@Override
+        	public void stateChanged(ChangeEvent arg0) {
+        		
+        		// stop the animation if it is playing
+        		if (_playButton.getIcon() == _pauseIcon)
+        			_playButton.doClick();
+        		
+        		_jmocap.getFigure().getPlayer().setCurFrame(_scrubber.getValue());
+        		_jmocap.getFigureManager().goToFrame(_scrubber.getValue());
+        		_scrubLabel.setText("Current Frame: " + _scrubber.getValue());
+        		
+        		JSlider source = (JSlider)arg0.getSource();
+        	    if (!source.getValueIsAdjusting()) 
+        	    {
+        	    	// if the animation was stopped, start it again
+        	    	if (_playButton.getIcon() == _playButton)
+        	    		_playButton.doClick();
+        	    }
+        	}
+        });
         return _scrubber;
     }
 
@@ -360,12 +384,6 @@ public class ControlPanel extends JPanel implements ChangeListener, PlayerFrameL
     	_scrubber.setValue(frame);
     	_scrubLabel.setText("Current Frame: " + frame);
     }
-
-	@Override
-	public void stateChanged(ChangeEvent arg0) {
-		_jmocap.getFigureManager().goToFrame(_scrubber.getValue());
-		_scrubLabel.setText("Current Frame: " + _scrubber.getValue());
-	}
 
 	@Override
 	public void frameUpdate(int framenumber) {
