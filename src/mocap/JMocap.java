@@ -319,7 +319,9 @@ public class JMocap
         this.targetHeight = targetHeight;
 		_dScale = rd.getScale();
 		
-        
+		// TODO: This should be the correct way to hook up the slider, 
+		// but it still lags the canvas :(
+		//getFigure().getPlayer().addListener(cPanel);
     }
     
     public int getNumFrames() {
@@ -775,10 +777,6 @@ public class JMocap
                 graphics2D.drawString("frame: "
                         + _figure.getPlayer().getCurrentFrame(),
                         getSize().width / 2, getSize().height - 20);
-                //This would make the scrubber update as it plays, but it 
-                //makes it super slow... Need to figure out some way to change 
-                //the slider position without doing a full repaint?
-               // cPanel.setScrubberPos(_figure.getPlayer().getCurrentFrame());
             }
 
         }

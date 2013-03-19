@@ -20,6 +20,7 @@ import javax.swing.event.ChangeListener;
 import javax.vecmath.Point3d;
 
 import mocap.JMocap;
+import mocap.player.PlayerFrameListener;
 
 /**
  * Pane on right hand side to load animations, change perspective,
@@ -27,7 +28,7 @@ import mocap.JMocap;
  * 
  * @author Michael Kipp
  */
-public class ControlPanel extends JPanel implements ChangeListener
+public class ControlPanel extends JPanel implements ChangeListener, PlayerFrameListener 
 {
 
     private static final int DEFAULT_FPS = 120;
@@ -352,7 +353,7 @@ public class ControlPanel extends JPanel implements ChangeListener
     	//This doesn't work. Apparently it's a JSlider bug. WTF?
     	_scrubber.setMajorTickSpacing(numFrames / 5);
     	_scrubber.setMinorTickSpacing(numFrames / 20);
-    	repaint();
+    	//repaint();
     }
     
     public void setScrubberPos(int frame) {
@@ -364,6 +365,11 @@ public class ControlPanel extends JPanel implements ChangeListener
 	public void stateChanged(ChangeEvent arg0) {
 		_jmocap.getFigureManager().goToFrame(_scrubber.getValue());
 		_scrubLabel.setText("Current Frame: " + _scrubber.getValue());
+	}
+
+	@Override
+	public void frameUpdate(int framenumber) {
+		setScrubberPos(framenumber);		
 	}
 
 //    protected void pause()

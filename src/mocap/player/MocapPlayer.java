@@ -175,7 +175,6 @@ public class MocapPlayer extends AnimPlayer
         if (_isPlaying) {
             _time += 1 / fps;  // time in seconds since setIsPlaying
             int frame = (int) Math.round(_time * _fps); // frame in animation
-            // TODO: getNumFrames() is always 0!!
             if (frame >= _animData.getNumFrames()) {
                 _time = 0;
                 _frame = -1;

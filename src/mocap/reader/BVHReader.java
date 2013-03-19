@@ -158,11 +158,11 @@ public class BVHReader {
 				}
 				
 				// use the AnimData object to hold this data
-				if (data == null) {
+				//if (data == null) {
 					data = new AnimData(allBones.size());
 					data.setFps(1.f / frameTime);
 					data.setNumFrames(frames);
-				}
+				//}
 				
 				// float[][] motion = new float[allBones.size()][];
 				
@@ -239,7 +239,7 @@ public class BVHReader {
 				}
 			}
 		}
-		BVHReader.animCounter++;
+		//BVHReader.animCounter++;
 		return true;
 	}
 
