@@ -83,4 +83,43 @@ public class Util
     	
     	return qz;
     }
+    
+    /**
+     * Go from quaternions to Euler angles
+     */
+    public static float[][] getEulerFromQuat(Quat4f[] quats)
+    {
+    	float[][] ret = new float[quats.length][];
+    	
+    	for (int i = 0; i < quats.length; i++)
+    	{
+    		Quat4f q = quats[i];
+    		q.normalize();
+    		ret[i] = new float[3];
+    		float[] r = ret[i];
+    		
+    		float test = q.x * q.y + q.z * q.w;
+    		if (test > 0.499) // singularity at north pole
+    		{
+    			r[2] = (float)(2 * Math.atan2(q.x, q.w));
+    			r[1] = (float)(Math.PI / 2);
+    			r[0] = 0;
+    			continue;
+    		} else if (test < -0.499) { // singularity at south pole
+    			r[2] = (float)(-2 * Math.atan2(q.x, q.w));
+    			r[1] = (float)(-Math.PI / 2);
+    			r[0] = 0;
+    			continue;
+    		}
+    		
+    		float sx = q.x*q.x;
+    		float sy = q.y*q.y;
+    		float sz = q.z*q.z;
+    		r[2] = (float)(Math.atan2(2*q.y*q.w - 2*q.x*q.z, 1 - 2*sy - 2*sz));
+    		r[1] = (float)(Math.asin(2*test));
+    		r[0] = (float)(Math.atan2(2*q.x*q.w - 2*q.y*q.z, 1 - 2*sx - 2*sz));
+    	}
+    	
+    	return ret;
+    }
 }

@@ -84,7 +84,6 @@ public class Bone {
 	}
 	
 	private TransformGroup getEndTG() {
-		// TODO Auto-generated method stub
 		return this.invBaseRotation;
 	}
 
@@ -103,6 +102,10 @@ public class Bone {
 		return this.parent;
 	}
 	
+	public String getName()
+	{
+		return this.name;
+	}
 	
 	public void getWorldPosition(Point3d p)
 	{
@@ -278,7 +281,6 @@ public class Bone {
 	}
 
 	public void collectBones(List<Bone> ls) {
-		// TODO Auto-generated method stub
 		ls.add(this);
 		for (Bone child : children)
 		{

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import mocap.figure.AnimData;
+import mocap.figure.Bone;
 
 class AnimSegment {
 	public int startFrame;
@@ -33,6 +34,7 @@ class AnimSegment {
 
 public class ConfigReader {
 	public ArrayList<AnimData> animData = new ArrayList<AnimData>();
+	public Bone skeleton;
 	
 	private HashSet<String> files = new HashSet<String>();
 	private ArrayList<AnimSegment> segments = new ArrayList<AnimSegment>();
@@ -79,6 +81,11 @@ public class ConfigReader {
 					// if successful, mark file as 'read' and stash its AnimData
 					fileData.put(segment.animFile, r.data);
 					loadedFile.put(segment.animFile, true);
+					
+					// set a skeleton if we don't have one already 
+					// (assuming same skeleton for all segments)
+					if (skeleton == null)
+						skeleton = r.skeleton;
 				}
 			}
 			
