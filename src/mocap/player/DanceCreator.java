@@ -24,8 +24,12 @@ public class DanceCreator {
 	 */
 	private AnimData blend(AnimData a, AnimData b) {
 		//TODO: Change this to Gaussian
-		float[] blendWeights = {.9f, .75f, .6f, .5f, .4f, .25f, .1f};
-		int numFrames = blendWeights.length;
+		int overlap = 50;
+		float[] blendWeights = new float[overlap];
+		for (int i=overlap; i>0; i--) {
+			blendWeights[overlap - i] = ((float)i) / overlap; 
+		}
+		
 		//Again, I assume both animations use the same bones
 		int numBones = a.getNumBones();
 		
@@ -35,34 +39,35 @@ public class DanceCreator {
 		Vector3f[] boneTrans1 = a.getBoneTransData();
 		Vector3f[] boneTrans2 = b.getBoneTransData();
 		
-		blendedData.setNumFrames(boneTrans1.length + 
-				boneTrans2.length - numFrames);
+		int numFrames = boneTrans1.length + boneTrans2.length - overlap;
 		
-		Vector3f[] blendedTrans = 
-			new Vector3f[blendedData.getNumFrames()];
+		blendedData.setNumFrames(numFrames);
 		
-		for (int i=0; i<boneTrans1.length - numFrames; i++) {
+		Vector3f[] blendedTrans = new Vector3f[numFrames];
+		
+		for (int i=0; i<boneTrans1.length - overlap; i++) {
 			blendedTrans[i] = boneTrans1[i];
 		}
 		
 		int k = 0;
-		for (int i=boneTrans1.length-numFrames; i<boneTrans1.length; i++) {
+		for (int i=boneTrans1.length-overlap; i<boneTrans1.length; i++) {
 			Vector3f vec1 = boneTrans1[i];
 			Vector3f vec2 = boneTrans2[k];
 			
 			Vector3f blend = new Vector3f();
 			blend.x = vec1.x * blendWeights[k] + vec2.x * 
-				blendWeights[numFrames - k - 1];
+				blendWeights[overlap - k - 1];
 			blend.y = vec1.y * blendWeights[k] + vec2.y * 
-				blendWeights[numFrames - k - 1];
+				blendWeights[overlap - k - 1];
 			blend.z = vec1.z * blendWeights[k] + vec2.z * 
-				blendWeights[numFrames - k - 1];
+				blendWeights[overlap - k - 1];
 			
 			blendedTrans[i] = blend;
+			k++;
 		}
 		
 		for (int i=k; i<boneTrans2.length; i++) {
-			blendedTrans[i + boneTrans1.length - numFrames] = boneTrans2[i];
+			blendedTrans[i + boneTrans1.length - overlap] = boneTrans2[i];
 		}
 		
 		blendedData.putBoneTransData(blendedTrans);
@@ -75,26 +80,27 @@ public class DanceCreator {
 			Quat4f[] boneRot1 = a.getBoneRotData(i);
 			Quat4f[] boneRot2 = b.getBoneRotData(i);
 			Quat4f[] boneBlend = 
-				new Quat4f[boneRot1.length + boneRot2.length - numFrames];
+				new Quat4f[numFrames];
 			
-			for (int j=0; j<boneRot1.length-numFrames; j++) {
+			for (int j=0; j<boneRot1.length-overlap; j++) {
 				boneBlend[j] = boneRot1[j];
 			}
 			
 			k=0;
-			for (int j=boneRot1.length-numFrames; j<boneRot1.length; j++) {
+			for (int j=boneRot1.length-overlap; j<boneRot1.length; j++) {
 				Quat4f q1 = new Quat4f(boneRot1[j]);
 				Quat4f q2 = new Quat4f(boneRot2[k]);
 				
 				q1.scale(blendWeights[k]);
-				q2.scale(blendWeights[numFrames-k-1]);
-				q1.mul(q2);
+				q2.scale(blendWeights[overlap-k-1]);
+				
+				q1.add(q2);
 				boneBlend[j] = q1;
 				k++;
 			}
 			
 			for (int j=k; j<boneRot2.length; j++) {
-				boneBlend[boneRot1.length-numFrames + j] = boneRot2[j];
+				boneBlend[boneRot1.length-overlap + j] = boneRot2[j];
 			}
 			
 			blendedData.putBoneRotData(i, boneBlend);
@@ -108,8 +114,15 @@ public class DanceCreator {
 	private float confLevel(AnimData a, AnimData b) {
 		//TODO
 		
+		Vector3f end = 
+			new Vector3f(a.getBoneTransData()[a.getBoneTransData().length - 1]);
+		Vector3f start = new Vector3f(b.getBoneTransData()[0]);
+		end.sub(start);
 		
-		return 0;
+		float len = end.length();
+		System.out.println(1/len);
+		
+		return 1/len;
 	}
 	
 	public AnimData getSequence(int numSegments) {
@@ -123,14 +136,20 @@ public class DanceCreator {
 			ArrayList<AnimData> highConf = new ArrayList<AnimData>();
 			
 			//TODO: good val for this threshold?
-			float thresh = 0;
-			
-			for(int j=0; j<segments.size(); j++) {
-				float conf = confLevel(sequence, segments.get(j));
-				
-				if (conf >= thresh) {
-					highConf.add(segments.get(j));
+			float thresh = .15f;
+			boolean found = false;
+
+			while (!found) {
+				for(int j=0; j<segments.size(); j++) {
+					float conf = confLevel(sequence, segments.get(j));
+
+					if (conf >= thresh) {
+						highConf.add(segments.get(j));
+					}
 				}
+				//repeatedly halve the threshold until one is found
+				if (highConf.size() == 0) thresh /= 2;
+				else found = true;
 			}
 			
 			rand = (int)(Math.random() * highConf.size());
