@@ -45,14 +45,22 @@ public class DanceCreator {
 		
 		Vector3f[] blendedTrans = new Vector3f[numFrames];
 		
-		for (int i=0; i<boneTrans1.length - overlap; i++) {
+		Vector3f end = new Vector3f(boneTrans1[boneTrans1.length-1]);
+		Vector3f start = boneTrans2[0];
+		
+		end.sub(start);
+		Vector3f shift = new Vector3f(end);
+		
+		for (int i=0; i<boneTrans1.length; i++) {
 			blendedTrans[i] = boneTrans1[i];
 		}
 		
 		int k = 0;
 		for (int i=boneTrans1.length-overlap; i<boneTrans1.length; i++) {
 			Vector3f vec1 = boneTrans1[i];
-			Vector3f vec2 = boneTrans2[k];
+			Vector3f vec2 = new Vector3f(boneTrans2[k]);
+			
+			vec2.add(shift);
 			
 			Vector3f blend = new Vector3f();
 			blend.x = vec1.x * blendWeights[k] + vec2.x * 
@@ -67,7 +75,9 @@ public class DanceCreator {
 		}
 		
 		for (int i=k; i<boneTrans2.length; i++) {
-			blendedTrans[i + boneTrans1.length - overlap] = boneTrans2[i];
+			Vector3f curr = new Vector3f(boneTrans2[i]);
+			curr.add(shift);
+			blendedTrans[i + boneTrans1.length - overlap] = curr;
 		}
 		
 		blendedData.putBoneTransData(blendedTrans);
@@ -112,15 +122,12 @@ public class DanceCreator {
 	}
 	
 	private float confLevel(AnimData a, AnimData b) {
-		//TODO
-		
 		Vector3f end = 
 			new Vector3f(a.getBoneTransData()[a.getBoneTransData().length - 1]);
 		Vector3f start = new Vector3f(b.getBoneTransData()[0]);
 		end.sub(start);
 		
 		float len = end.length();
-		System.out.println(1/len);
 		
 		return 1/len;
 	}
