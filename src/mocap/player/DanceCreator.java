@@ -138,6 +138,7 @@ public class DanceCreator {
 			//TODO: good val for this threshold?
 			float thresh = .15f;
 			boolean found = false;
+			boolean wasInc = false;
 
 			while (!found) {
 				for(int j=0; j<segments.size(); j++) {
@@ -149,6 +150,12 @@ public class DanceCreator {
 				}
 				//repeatedly halve the threshold until one is found
 				if (highConf.size() == 0) thresh /= 2;
+				//if there are a bunch found, increase the threshold
+				//but only do this once, otherwise might get stuck
+				else if (highConf.size() > 4 && !wasInc) {
+					wasInc = true;
+					thresh += .05;
+				}
 				else found = true;
 			}
 			
