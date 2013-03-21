@@ -35,8 +35,11 @@ public class DanceCreator {
 		Vector3f[] boneTrans1 = a.getBoneTransData();
 		Vector3f[] boneTrans2 = b.getBoneTransData();
 		
+		blendedData.setNumFrames(boneTrans1.length + 
+				boneTrans2.length - numFrames);
+		
 		Vector3f[] blendedTrans = 
-			new Vector3f[boneTrans1.length + boneTrans2.length - numFrames];
+			new Vector3f[blendedData.getNumFrames()];
 		
 		for (int i=0; i<boneTrans1.length - numFrames; i++) {
 			blendedTrans[i] = boneTrans1[i];

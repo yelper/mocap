@@ -323,7 +323,7 @@ public class JMocap
         numFrames = rd.data.getNumFrames();
         
         this.targetHeight = targetHeight;
-		_dScale = rd.getScale();
+		_dScale = BVHReader.scale;
 		
 		// TODO: This should be the correct way to hook up the slider, 
 		// but it still lags the canvas :(
@@ -341,6 +341,16 @@ public class JMocap
     	ArrayList<AnimData> segments = cr.animData;
     	
     	dc = new DanceCreator(segments);
+    	AnimData dance = dc.getSequence(10);
+        initFigure(cr.skeleton, f.getName(), offset);
+        initAnim(dance, f.getName(), _figure);
+        
+        numFrames = dance.getNumFrames();
+        System.out.println(numFrames);
+        cPanel.setFrames(numFrames);
+        
+        this.targetHeight = targetHeight;
+		_dScale = BVHReader.scale;
     	
     	// try passing a segment to the PerlinNoise object to see if it works
     	PerlinNoise pn = new PerlinNoise(segments.get(0), cr.skeleton);

@@ -16,11 +16,12 @@ public class BVHReader {
 	public Bone skeleton;
 	
 	public static AnimData data;
+	public static double scale = 1.0;
 	
 	private double[][] motValues;
 	private int indexCounter;
 	private float targetHeight;
-	private double maxRootDistance, scale = 1.0;
+	private double maxRootDistance; 
 	private List<Bone> allBones;
 	
 	abstract class BVHNode { Vector3d offset; }
@@ -316,9 +317,5 @@ public class BVHReader {
 	
 	public double[][] getMotVals() {
 		return motValues;
-	}
-
-	public double getScale() {
-		return scale;
 	}
 }
