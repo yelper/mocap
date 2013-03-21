@@ -30,6 +30,7 @@ public class DanceCreator {
 		for (int i=0; i<numBones; i++) {
 			float[] boneData1 = a.getBoneData(i);
 			float[] boneData2 = b.getBoneData(i);
+			System.out.println(boneData1 + ", " + boneData2);
 			
 			int numFrames = blendWeights.length;
 			float[] boneBlend = 
@@ -77,7 +78,7 @@ public class DanceCreator {
 			for(int j=0; j<segments.size(); j++) {
 				float conf = confLevel(sequence, segments.get(j));
 				
-				if (conf > thresh) {
+				if (conf >= thresh) {
 					highConf.add(segments.get(j));
 				}
 			}

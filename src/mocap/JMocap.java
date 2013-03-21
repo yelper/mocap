@@ -106,6 +106,7 @@ public class JMocap
     private int numFrames;
     
     private ControlPanel cPanel;
+	private DanceCreator dc;
     
     public JMocap()
     {
@@ -336,17 +337,19 @@ public class JMocap
     	ConfigReader cr = new ConfigReader();
     	cr.readFile(f, workingDir, targetHeight);
     	
-    	// TODO: do stuff with the read-in data here
-    	//       also see commented out lines in JMocapController.loadCfgAction
+    	// TODO: see commented out lines in JMocapController.loadCfgAction
     	ArrayList<AnimData> segments = cr.animData;
     	
-    	//TODO: create a button or menu item to create dance
-    	//probably make this global
-    	DanceCreator dc = new DanceCreator(segments);
+    	dc = new DanceCreator(segments);
     	
     	// try passing a segment to the PerlinNoise object to see if it works
     	PerlinNoise pn = new PerlinNoise(segments.get(0), cr.skeleton);
     	System.out.println(pn.toString());
+    }
+    
+    public void createDance(int numSegs) {
+    	_figure.setAnimation(dc.getSequence(numSegs));
+    	_figureManager.playAll();
     }
     
     public int getNumFrames() {

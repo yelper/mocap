@@ -26,6 +26,7 @@ import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3f;
@@ -210,7 +211,7 @@ public class JMocapGUI extends JFrame
         mb.add(m);
 
         // ************** PLAYBACK MENU
-        m = new Menu("Playback");
+        /*m = new Menu("Playback");
         PlaybackMenuListener pli = new PlaybackMenuListener();
         mb.add(m);
         CheckboxMenuItem cb = new CheckboxMenuItem("global translation");
@@ -220,10 +221,10 @@ public class JMocapGUI extends JFrame
         cb = new CheckboxMenuItem("global orientation");
         cb.setState(true);
         cb.addItemListener(pli);
-        m.add(cb);
+        m.add(cb);*/
 
         // ************** PLAYBACK MENU
-        m = new Menu("Inspect");
+        /*m = new Menu("Inspect");
         mb.add(m);
         mi = new MenuItem("Inspect bone");
         m.add(mi);
@@ -236,9 +237,9 @@ public class JMocapGUI extends JFrame
                 /*new JointInspector(_jMocap.getFigure(),
                         _jMocap.getFigure().getSkeleton().findBone(
                         "lhand"));
-                        */
+                        
             }
-        });
+        });*/
 
         // ************** VIEW MENU
         m = new Menu("View");
@@ -247,7 +248,7 @@ public class JMocapGUI extends JFrame
         mi = new MenuItem(MENU_RESET_CAM);
         mi.addActionListener(actionListener);
         m.add(mi);
-        cb = new CheckboxMenuItem("show coord", true);
+        CheckboxMenuItem cb = new CheckboxMenuItem("show coord", true);
         cb.addItemListener(li);
         m.add(cb);
         cb = new CheckboxMenuItem("show floor", true);
@@ -256,7 +257,7 @@ public class JMocapGUI extends JFrame
         cb = new CheckboxMenuItem("z up");
         cb.addItemListener(li);
         m.add(cb);
-        Menu sm = new Menu("Bones");
+       /* Menu sm = new Menu("Bones");
         m.add(sm);
         cb = new CheckboxMenuItem("bones off");
         cb.addItemListener(li);
@@ -299,6 +300,22 @@ public class JMocapGUI extends JFrame
             {
                 showPathController();
             }
+        });*/
+        
+        m = new Menu("Dance");
+        mb.add(m);
+        mi = new MenuItem("Create dance");
+        m.add(mi);
+        mi.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int segs = Integer.parseInt(JOptionPane.showInputDialog(
+						null, "Enter number of segments", 10));
+				
+				_jMocap.createDance(segs);
+			}
+        	
         });
 
         return mb;

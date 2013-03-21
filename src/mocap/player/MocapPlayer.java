@@ -80,11 +80,11 @@ public class MocapPlayer extends AnimPlayer
                 	//bone.setPose(_animData.getBoneXformData(0, bone.getIndex(), frame), _offset);
                 	int bi = bone.getIndex();
                 	if (bi == 0)
-                		bone.setPose(_animData.getBoneTransData(0, bi)[frame],
-                					 _animData.getBoneRotData(0, bi)[frame],
+                		bone.setPose(_animData.getBoneTransData()[frame],
+                					 _animData.getBoneRotData(bi)[frame],
                 				     _offset);
                 	else
-                		bone.setPose(_animData.getBoneRotData(0, bi)[frame], _offset);
+                		bone.setPose(_animData.getBoneRotData(bi)[frame], _offset);
                 }
             }
             _frame = frame;

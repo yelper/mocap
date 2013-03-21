@@ -16,7 +16,6 @@ public class BVHReader {
 	public Bone skeleton;
 	
 	public static AnimData data;
-	public static int animCounter = 0;
 	
 	private double[][] motValues;
 	private int indexCounter;
@@ -49,7 +48,6 @@ public class BVHReader {
 	}
 	
 	public static void resetAnimData() { //for clearing the scene
-		animCounter = 0;
 		data = null;
 	}
 	
@@ -228,10 +226,10 @@ public class BVHReader {
 					// put this bone's motion data into the AnimData object
 					//data.putBoneData(animCounter, i, motion[i]);
 					
-					data.putBoneRotData(animCounter, i, rotation[i]);
+					data.putBoneRotData(i, rotation[i]);
 
 					if (dof == 6)
-						data.putBoneTransData(animCounter, translation);
+						data.putBoneTransData(translation);
 					
 					// reset the index to be its index relative to all other objects
 					// (since the animation data is now stored bone-major)
@@ -239,7 +237,6 @@ public class BVHReader {
 				}
 			}
 		}
-		//BVHReader.animCounter++;
 		return true;
 	}
 

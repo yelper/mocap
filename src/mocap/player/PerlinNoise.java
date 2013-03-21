@@ -29,7 +29,7 @@ public class PerlinNoise {
 		for (int i = 0; i < bones.size(); i++)
 		{
 			Bone bone = bones.get(i);
-			float[][] rots = Util.getEulerFromQuat(data.getBoneRotData(0, bone.getIndex()));
+			float[][] rots = Util.getEulerFromQuat(data.getBoneRotData(bone.getIndex()));
 			
 			float maxz = rots[0][0]; float maxy = rots[0][1]; float maxx = rots[0][2];
 			float minz = rots[0][0]; float miny = rots[0][1]; float minx = rots[0][2];
