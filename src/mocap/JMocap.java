@@ -38,6 +38,7 @@ import mocap.figure.FigureManager;
 // import mocap.figure.MotionTrailPoint;
 import mocap.gui.CameraChangeListener;
 import mocap.gui.ControlPanel;
+import mocap.player.DanceCreator;
 import mocap.player.PerlinNoise;
 import mocap.reader.BVHReader;
 import mocap.reader.ConfigReader;
@@ -338,6 +339,10 @@ public class JMocap
     	// TODO: do stuff with the read-in data here
     	//       also see commented out lines in JMocapController.loadCfgAction
     	ArrayList<AnimData> segments = cr.animData;
+    	
+    	//TODO: create a button or menu item to create dance
+    	//probably make this global
+    	DanceCreator dc = new DanceCreator(segments);
     	
     	// try passing a segment to the PerlinNoise object to see if it works
     	PerlinNoise pn = new PerlinNoise(segments.get(0), cr.skeleton);
