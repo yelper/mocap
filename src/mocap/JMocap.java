@@ -35,6 +35,7 @@ import mocap.figure.AnimData;
 import mocap.figure.Bone;
 import mocap.figure.Figure;
 import mocap.figure.FigureManager;
+import mocap.figure.JointPosLine;
 // import mocap.figure.MotionTrailPoint;
 import mocap.gui.CameraChangeListener;
 import mocap.gui.ControlPanel;
@@ -104,6 +105,8 @@ public class JMocap
     private boolean _bShowMotionTrailVelocity = false;
     private float targetHeight;
     private int numFrames;
+    
+    private BranchGroup jointTrail;
     
     private ControlPanel cPanel;
 	private DanceCreator dc;
@@ -231,6 +234,10 @@ public class JMocap
             _bgMotionTrails.removeAllChildren();
             _bgMotionTrails = null;
         }
+        
+        if (jointTrail != null)
+        	_root.removeChild(jointTrail);
+        
         BVHReader.resetAnimData();
 
     }
@@ -308,6 +315,16 @@ public class JMocap
         figure.setAnimation(data);
         figure.getPlayer().reset();
     }
+    
+    public void initJointLine(Bone skeleton, AnimData data)
+    {
+    	String boneToFollow = "RightFoot";
+    	JointPosLine jpl = new JointPosLine(skeleton, boneToFollow, data);
+    	
+    	jointTrail = jpl.getLineObject();
+    	
+    	_root.addChild(jointTrail);
+    }
 
 
     public void loadBVH(File f, float targetHeight, Point3d offset)
@@ -317,6 +334,8 @@ public class JMocap
         BVHReader rd = new BVHReader();
         rd.readFile(f, targetHeight);
         
+        initJointLine(rd.skeleton, rd.data);
+        
         initFigure(rd.skeleton, f.getName(), offset);
         initAnim(rd.data, f.getName(), _figure);
         
@@ -324,6 +343,8 @@ public class JMocap
         
         this.targetHeight = targetHeight;
 		_dScale = BVHReader.scale;
+		
+		
 		
 		// TODO: This should be the correct way to hook up the slider, 
 		// but it still lags the canvas :(
