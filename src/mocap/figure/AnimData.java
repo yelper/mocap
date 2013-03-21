@@ -18,34 +18,15 @@ import javax.vecmath.Vector3f;
 public class AnimData
 {
 	private Quat4f[][] rotations;
-	private Vector3f[] translations;	
-
-    private float[][] data; // first index: bones, second index: frames
+	private Vector3f[] translations;
     private int _numFrames, _numBones;
     private float _fps = MocapPlayer.DEFAULT_FPS;
 
     public AnimData(int numBones)
     {
-        data = new float[numBones][];
-        
         rotations = new Quat4f[numBones][]; 
         
         _numBones = numBones;
-    }
-
-    public void putBoneData(int boneIndex, List<Float> animdata)
-    {
-    	float[][] currAnimData = data;
-        currAnimData[boneIndex] = new float[animdata.size()];
-        int j = 0;
-        for (Float x : animdata) {
-        	currAnimData[boneIndex][j++] = x;
-        }
-    }
-
-    public void putBoneData(int boneIndex, float[] animdata)
-    {
-        data[boneIndex] = animdata;
     }
     
     public void putBoneRotData(int index, float[] bonedata)
@@ -61,6 +42,11 @@ public class AnimData
     	}
     }
     
+    public void putBoneRotData(int index, Quat4f[] bonedata)
+    {
+    	rotations[index] = bonedata;
+    }
+    
     public void putBoneTransData(float[] bonedata)
     {
     	translations = new Vector3f[_numFrames]; 
@@ -69,6 +55,10 @@ public class AnimData
     		float[] dir = Arrays.copyOfRange(bonedata, 3*i, 3*i+3);
     		translations[i] = new Vector3f(dir);
     	}
+    }
+    
+    public void putBoneTransData(Vector3f[] bonedata) {
+    	translations = bonedata;
     }
     
     public Quat4f[] getBoneRotData(int boneindex)
@@ -86,11 +76,6 @@ public class AnimData
     	Vector3f thisTrans = translations[frame];
     	Quat4f   thisQuat  = rotations[boneIndex][frame];
     	return new Transform3D(thisQuat, thisTrans, 1f);
-    }
-
-    public float[] getBoneData(int boneIndex)
-    {
-        return data[boneIndex];
     }
 
     public void setNumFrames(int n)
@@ -137,11 +122,6 @@ public class AnimData
 		AnimData ret = new AnimData(_numBones);
 		ret.setFps(_fps);
 		ret.setNumFrames(endFrame - startFrame);
-		
-		//also need to do the actual bone data
-		for (int i=0; i<_numBones; i++) {
-			ret.putBoneData(i, Arrays.copyOfRange(data[i], startFrame, endFrame));
-		}
 		
 		// chop up each bone's animdata to the specified window
 		Quat4f[][] thisRot = rotations;
