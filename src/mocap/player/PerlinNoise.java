@@ -59,10 +59,12 @@ public class PerlinNoise {
     	{
     		Bone bone = bones.get(b);
     		float[][] xp = extremePts[b];
-    		String thisLine = String.format("%-15s {% 1.2f % 1.2f % 1.2f} {% 1.2f % 1.2f % 1.2f}",
+    		String thisLine = String.format("%-15s {% 7.2f % 7.2f % 7.2f} {% 7.2f % 7.2f % 7.2f}",
     				bone.getName(),
-    				xp[0][2], xp[0][1], xp[0][0],
-    				xp[1][2], xp[1][1], xp[1][0]);
+    				Math.toDegrees((double)xp[0][2]), Math.toDegrees((double)xp[0][1]), 
+    				Math.toDegrees((double)xp[0][0]),
+    				Math.toDegrees((double)xp[1][2]), Math.toDegrees((double)xp[1][1]), 
+    				Math.toDegrees((double)xp[1][0]));
     		
     		sb.append(thisLine);
     		sb.append("\n");
