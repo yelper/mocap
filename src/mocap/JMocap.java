@@ -360,9 +360,10 @@ public class JMocap
     	
     	// TODO: see commented out lines in JMocapController.loadCfgAction
     	ArrayList<AnimData> segments = cr.animData;
-    	
-    	dc = new DanceCreator(segments);
+        
+    	dc = new DanceCreator(segments, cr.skeleton);
     	AnimData dance = dc.getSequence(10);
+    	
         initFigure(cr.skeleton, f.getName(), offset);
         initAnim(dance, f.getName(), _figure);
         
