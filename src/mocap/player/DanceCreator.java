@@ -51,7 +51,7 @@ public class DanceCreator {
 		
 		Vector3f[] blendedTrans = new Vector3f[numFrames];
 		
-		Vector3f end = new Vector3f(boneTrans1[boneTrans1.length-1]);
+		Vector3f end = new Vector3f(boneTrans1[boneTrans1.length-overlap-1]);
 		Vector3f start = boneTrans2[0];
 		
 		end.sub(start);
@@ -90,13 +90,13 @@ public class DanceCreator {
 		// *** End blending translational data *** //
 		
 		
-		/*Quat4f qShift = null;
-		Quat4f first = new Quat4f(a.getBoneRotData(0)[a.getNumFrames()-1]);
+		Quat4f qShift = null;
+		Quat4f first = new Quat4f(a.getBoneRotData(0)[a.getNumFrames()-overlap-1]);
 		Quat4f sec = new Quat4f(b.getBoneRotData(0)[0]);
 				
 		qShift = new Quat4f(sec);
 		qShift.inverse();
-		qShift.mul(first);*/
+		qShift.mul(first);
 		
 		// *** Start blending rotational data *** //
 		for (int i=0; i<numBones; i++) {
@@ -113,7 +113,7 @@ public class DanceCreator {
 			for (int j=boneRot1.length-overlap; j<boneRot1.length; j++) {
 				Quat4f q1 = new Quat4f(boneRot1[j]);
 				Quat4f q2 = new Quat4f(boneRot2[k]);
-				//if (i==0) q2.mul(qShift);
+				if (i==0) q2.mul(qShift);
 				q1.interpolate(q2, 1-blendWeights[k]);
 				
 				boneBlend[j] = q1;
@@ -122,7 +122,7 @@ public class DanceCreator {
 			
 			for (int j=k; j<boneRot2.length; j++) {
 				Quat4f q = new Quat4f(boneRot2[j]);
-				//if (i==0) q.mul(qShift);
+				if (i==0) q.mul(qShift);
 				boneBlend[boneRot1.length-overlap + j] = q;
 			}
 			
