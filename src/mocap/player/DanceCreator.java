@@ -90,13 +90,13 @@ public class DanceCreator {
 		// *** End blending translational data *** //
 		
 		
-		Quat4f qShift = null;
+		/*Quat4f qShift = null;
 		Quat4f first = new Quat4f(a.getBoneRotData(0)[a.getNumFrames()-overlap-1]);
 		Quat4f sec = new Quat4f(b.getBoneRotData(0)[0]);
 				
 		qShift = new Quat4f(sec);
 		qShift.inverse();
-		qShift.mul(first);
+		qShift.mul(first);*/
 		
 		// *** Start blending rotational data *** //
 		for (int i=0; i<numBones; i++) {
@@ -113,7 +113,7 @@ public class DanceCreator {
 			for (int j=boneRot1.length-overlap; j<boneRot1.length; j++) {
 				Quat4f q1 = new Quat4f(boneRot1[j]);
 				Quat4f q2 = new Quat4f(boneRot2[k]);
-				if (i==0) q2.mul(qShift);
+				//if (i==0) q2.mul(qShift);
 				q1.interpolate(q2, 1-blendWeights[k]);
 				
 				boneBlend[j] = q1;
@@ -122,7 +122,7 @@ public class DanceCreator {
 			
 			for (int j=k; j<boneRot2.length; j++) {
 				Quat4f q = new Quat4f(boneRot2[j]);
-				if (i==0) q.mul(qShift);
+				//if (i==0) q.mul(qShift);
 				boneBlend[boneRot1.length-overlap + j] = q;
 			}
 			
@@ -196,26 +196,21 @@ public class DanceCreator {
 		sequence = segments.get(rand);
 		
 		for(int i=1; i<numSegments; i++) {
-			float thresh = 2f;
+			float thresh = 4f;
 			Map<Float, AnimData> highConf = getSegsOverThresh(sequence, thresh);
 			
 			while (highConf.size() == 0) {
-				thresh -= .2f;
+				thresh -= .5f;
 				highConf = getSegsOverThresh(sequence, thresh);
 			}
 			
 			ArrayList<AnimData> chosen = new ArrayList<AnimData>();
 			
-			if (highConf.keySet().size() < 3) {
-				highConf = getTopThree(sequence);
-			}
-			
 			for (Float f : highConf.keySet()) {
 				chosen.add(highConf.get(f));
 			}
 			
-			rand = (int)(Math.random() * chosen.size());
-			
+			rand = (int)(Math.random() * (chosen.size()-1));
 			sequence = blend(sequence, chosen.get(rand));
 			
 			//TODO: Add Perlin noise
@@ -225,7 +220,7 @@ public class DanceCreator {
 	}
 
 	private Map<Float, AnimData> getTopThree(AnimData sequence) {
-		Map<Float, AnimData> allConf = getSegsOverThresh(sequence, 4);
+		Map<Float, AnimData> allConf = getSegsOverThresh(sequence, 0);
 		
 		float max = 0;
 		float max2 = 0;
