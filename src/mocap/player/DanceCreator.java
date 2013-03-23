@@ -109,10 +109,7 @@ public class DanceCreator {
 				Quat4f q1 = new Quat4f(boneRot1[j]);
 				Quat4f q2 = new Quat4f(boneRot2[k]);
 				
-				q1.scale(blendWeights[k]);
-				q2.scale(blendWeights[overlap-k-1]);
-				
-				q1.add(q2);
+				q1.interpolate(q2, 1-blendWeights[k]);
 				boneBlend[j] = q1;
 				k++;
 			}
