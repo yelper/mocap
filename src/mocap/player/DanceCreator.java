@@ -148,23 +148,22 @@ public class DanceCreator {
 			Point3d pos1 = new Point3d();
 			bone.getWorldPosition(pos1);
 			
-			System.out.println("P1: " + pos1);
-			
-			//Shift over the first frame to calculate distance
-			Vector3f end = new Vector3f(a.getBoneTransData()[a.getNumFrames()-1]);
-			Vector3f start = b.getBoneTransData()[0];
-			end.sub(start);
-			Vector3f shift = new Vector3f(end);
-			shift.add(start);
 			
 			if (bi == 0)
-				bone.setPose(shift, b.getBoneRotData(bi)[0], offset);
+				//Use the last frame as the position for the root, because
+				//we're going to shift it over before blending anyway
+				bone.setPose(a.getBoneTransData()[a.getNumFrames()-1], 
+						b.getBoneRotData(bi)[0], offset);
 			else
 				bone.setPose(b.getBoneRotData(bi)[0], offset);
 			
 			Point3d pos2 = new Point3d();
 			bone.getWorldPosition(pos2);
 			
+			System.out.println("\n\nBone Data");
+			System.out.println("First rot: " + a.getBoneRotData(bi)[a.getNumFrames() - 1]);
+			System.out.println("Second rot: " + b.getBoneRotData(bi)[0]);
+			System.out.println("P1: " + pos1);
 			System.out.println("P2: " + pos2);
 			
 			double dist = pos2.distance(pos1);
