@@ -92,13 +92,20 @@ public class DanceCreator {
 		// *** End blending translational data *** //
 		
 		
+		/*Quat4f qShift = null;
+		Quat4f first = new Quat4f(a.getBoneRotData(0)[a.getNumFrames()-1]);
+		Quat4f sec = new Quat4f(b.getBoneRotData(0)[0]);
+				
+		qShift = new Quat4f(sec);
+		qShift.inverse();
+		qShift.mul(first);*/
 		
 		// *** Start blending rotational data *** //
 		for (int i=0; i<numBones; i++) {
 			Quat4f[] boneRot1 = a.getBoneRotData(i);
 			Quat4f[] boneRot2 = b.getBoneRotData(i);
-			Quat4f[] boneBlend = 
-				new Quat4f[numFrames];
+			
+			Quat4f[] boneBlend = new Quat4f[numFrames];
 			
 			for (int j=0; j<boneRot1.length-overlap; j++) {
 				boneBlend[j] = boneRot1[j];
@@ -108,14 +115,17 @@ public class DanceCreator {
 			for (int j=boneRot1.length-overlap; j<boneRot1.length; j++) {
 				Quat4f q1 = new Quat4f(boneRot1[j]);
 				Quat4f q2 = new Quat4f(boneRot2[k]);
-				
+				//if (i==0) q2.mul(qShift);
 				q1.interpolate(q2, 1-blendWeights[k]);
+				
 				boneBlend[j] = q1;
 				k++;
 			}
 			
 			for (int j=k; j<boneRot2.length; j++) {
-				boneBlend[boneRot1.length-overlap + j] = boneRot2[j];
+				Quat4f q = new Quat4f(boneRot2[j]);
+				//if (i==0) q.mul(qShift);
+				boneBlend[boneRot1.length-overlap + j] = q;
 			}
 			
 			blendedData.putBoneRotData(i, boneBlend);
@@ -133,6 +143,8 @@ public class DanceCreator {
 		skeleton.collectBones(bones); 
 		Point3d offset = new Point3d(); 
 		
+		ArrayList<Point3d> pos1s = new ArrayList<Point3d>();
+		
 		for (int i = 0; i < bones.size(); i++)
 		{
 			Bone bone = bones.get(i);
@@ -147,8 +159,15 @@ public class DanceCreator {
 			
 			Point3d pos1 = new Point3d();
 			bone.getWorldPosition(pos1);
+			pos1s.add(pos1);
+		}
+		
+		ArrayList<Point3d> pos2s = new ArrayList<Point3d>();
 			
-			
+		for (int i = 0; i < bones.size(); i++)
+		{
+			Bone bone = bones.get(i);
+			int bi = bone.getIndex();
 			if (bi == 0)
 				//Use the last frame as the position for the root, because
 				//we're going to shift it over before blending anyway
@@ -159,36 +178,17 @@ public class DanceCreator {
 			
 			Point3d pos2 = new Point3d();
 			bone.getWorldPosition(pos2);
-			
-			System.out.println("\n\nBone Data");
-			System.out.println("First rot: " + a.getBoneRotData(bi)[a.getNumFrames() - 1]);
-			System.out.println("Second rot: " + b.getBoneRotData(bi)[0]);
-			System.out.println("P1: " + pos1);
-			System.out.println("P2: " + pos2);
-			
-			double dist = pos2.distance(pos1);
-			//System.out.println(dist);
+			pos2s.add(pos2);
+		}
+		
+		for(int i=0; i<pos1s.size(); i++) {
+			double dist = pos2s.get(i).distance(pos1s.get(i));
 			
 			conf += dist;
 		}
 		
-		//Now add in the difference between the base rotation of the root
-		Quat4f rot1 = new Quat4f(a.getBoneRotData(0)[a.getNumFrames() - 1]);
-		Quat4f rot2 = b.getBoneRotData(0)[0];
-		
-		float innerProd = (rot1.x * rot2.x + rot1.y * rot2.y + 
-				rot2.z * rot2.z + rot1.w * rot2.w);
-		
-		//The angle between the two quaternions
-		double theta = Math.acos((2 * innerProd * innerProd) - 1);
-		//System.out.print(conf + ", " + theta + ", ");
-		if (!Double.isNaN(theta))conf += theta;
-		else conf += 1000;
-		// an arbitrarily high value because if theta is nan, the rotations are
-		//drastically different
-		
 		//System.out.println(1/conf);
-		return 1/conf;
+		return 100/conf;
 	}
 	
 	public AnimData getSequence(int numSegments) {
@@ -228,7 +228,7 @@ public class DanceCreator {
 	}
 
 	private Map<Float, AnimData> getTopThree(AnimData sequence) {
-		Map<Float, AnimData> allConf = getSegsOverThresh(sequence, 0);
+		Map<Float, AnimData> allConf = getSegsOverThresh(sequence, 4);
 		
 		float max = 0;
 		float max2 = 0;
@@ -267,7 +267,7 @@ public class DanceCreator {
 		
 		for(int j=0; j<segments.size(); j++) {
 			float conf = confLevel(sequence, segments.get(j));
-
+			System.out.println(conf);
 			if (conf >= thresh) {
 				highConf.put(conf, segments.get(j));
 			}
