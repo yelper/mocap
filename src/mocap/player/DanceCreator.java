@@ -30,7 +30,6 @@ public class DanceCreator {
 	 * @return
 	 */
 	private AnimData blend(AnimData a, AnimData b) {
-		//TODO: Change this to Gaussian
 		int overlap = 50;
 		float[] blendWeights = new float[overlap];
 		for (int i=overlap; i>0; i--) {
@@ -44,7 +43,6 @@ public class DanceCreator {
 		
 		// *** Start blending translational data *** //
 		Vector3f[] boneTrans1 = a.getBoneTransData();
-		//System.out.println(b);
 		Vector3f[] boneTrans2 = b.getBoneTransData();
 		
 		int numFrames = boneTrans1.length + boneTrans2.length - overlap;
@@ -187,7 +185,6 @@ public class DanceCreator {
 			conf += dist;
 		}
 		
-		//System.out.println(1/conf);
 		return 100/conf;
 	}
 	
@@ -267,7 +264,7 @@ public class DanceCreator {
 		
 		for(int j=0; j<segments.size(); j++) {
 			float conf = confLevel(sequence, segments.get(j));
-			System.out.println(conf);
+			
 			if (conf >= thresh) {
 				highConf.put(conf, segments.get(j));
 			}
